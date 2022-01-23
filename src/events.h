@@ -1,19 +1,22 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
-#include "time.h"
 #include <Arduino.h>
+#include "protectedData.h"
 
+class Event
+{
+private:
 
-struct eventRawData {
-    unsigned int sectors[4];
-} // arrumar essa struct
+public:
 
-// class event
-// {
-//     public:
-    
-// }
+    programationRawData rawData;
+
+    Event(programationRawData _rd);
+
+    bool isEnabled();
+    void setStatus(bool stt);
+};
 
 void checkEvents();
 

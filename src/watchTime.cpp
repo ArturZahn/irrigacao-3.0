@@ -16,6 +16,8 @@ void handdleWatchTime()
         if(now != lastDayTime)
         {
             // new minute!
+            checkEvents();
+
             lastDayTime = now;
         }
         
