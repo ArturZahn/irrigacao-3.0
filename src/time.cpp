@@ -7,7 +7,7 @@ unsigned long getTime()
     return temporaryVar_time;
 }
 
-int getDayTime()
+unsigned int getDayTime()
 {
     return (getTime()%86400)/60;
 }
