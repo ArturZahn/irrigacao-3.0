@@ -5,8 +5,8 @@
 
 #define numOfSections 4
 
-#define commonPin 34
-#define pumpPin 35
+#define commonPin 27
+#define pumpPin 14
 #define section0 32
 #define section1 33
 #define section2 25

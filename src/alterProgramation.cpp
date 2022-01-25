@@ -171,7 +171,7 @@ void alterProgramation(String &args)
             return;
         }
 
-        durationsT[count] = orderT[count]!=0?ajustMax(thisArg.substring(thingIdx+1).toInt(), 255):0;
+        durationsT[count] = ajustMax(thisArg.substring(thingIdx+1).toInt(), 255);
 
         count++;
         thingIdx = args.indexOf(F(";"));

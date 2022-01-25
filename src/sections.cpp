@@ -3,10 +3,14 @@
 void initSections()
 {
     pinMode(commonPin, OUTPUT);
+    digiWrite(commonPin, LOW);
     pinMode(pumpPin, OUTPUT);
+    digiWrite(pumpPin, LOW);
+
     for(int i = 0; i < numOfSections; i++)
     {
         pinMode(getSectionPin(i), OUTPUT);
+        digiWrite(getSectionPin(i), LOW);
     }
 }
 

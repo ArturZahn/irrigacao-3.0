@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include "aditionalFunctions.h"
-// #include "rtc.h"
+#include "rtc.h"
 
 #define timeEmpty 0x7FF
 #define timeMax 0x59F

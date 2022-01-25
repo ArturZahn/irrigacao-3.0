@@ -3,10 +3,10 @@
 unsigned long temporaryVar_time = 1577836800;
 unsigned long getTime()
 {
-    // checkIfRTCIsWorking();
-    // readTimeFromRTC();
-    temporaryVar_time += 60;
-    return temporaryVar_time;
+    checkIfRTCIsWorking();
+    return readTimeFromRTC();
+    // temporaryVar_time += 60;
+    // return temporaryVar_time;
 }
 
 unsigned int getDayTime()

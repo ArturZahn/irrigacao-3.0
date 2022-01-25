@@ -85,7 +85,7 @@ void runCommand()
     
     // else if(command == F("alterarSetorManual")) Serial.println("alterManualSetor(args);"); //alterManualSetor(args);
     
-    else if(command == F("dispararProgramacao")) Serial.println("fireProgramation(byte(args.toInt()-1));"); //fireProgramation(byte(args.toInt()-1));
+    else if(command == F("dispararProgramacao")) startEvent(args.toInt());
 
     else if(command == F("reiniciar")) Serial.println("restartSystem();"); //restartSystem();
 

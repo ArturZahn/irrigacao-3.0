@@ -1,11 +1,15 @@
 #include "rtc.h"
 
-RTClib rtc;
+RTClib myRTC;
+
 DateTime t;
 
 void ASDASDRTC()
 {
-    Serial.println("init RTC");
+
+    Wire.begin();
+
+
     if(checkIfRTCIsWorking())
     {
         Serial.println("RTC is working!");
@@ -14,8 +18,6 @@ void ASDASDRTC()
     {
         Serial.println("RTC isnt working");
     }
-    Serial.print("current time:");
-    Serial.println(readTimeFromRTC());
 }
 
 int readTimeFromRTC()
@@ -26,7 +28,7 @@ int readTimeFromRTC()
 
 bool checkIfRTCIsWorking()
 {
-    t = rtc.now();
+    t = myRTC.now();
     if(t.month() == 165 || t.day() == 165 || t.hour() == 165 || t.minute() == 165 || t.second() == 85)
     {
         return false;

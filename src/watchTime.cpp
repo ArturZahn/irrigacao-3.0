@@ -12,12 +12,12 @@ void handleWatchTime()
         int now = getDayTime();
         if(now != lastDayTime)
         {
-            if(now%50==0)
-            {
+            // new minute!
+            // if(now%50==0)
+            // {
                 Serial.print("time: ");
                 Serial.println(now);
-            }
-            // new minute!
+            // }
 
             // continue only if programations are not paused
             if(!areProgramationsPaused())
