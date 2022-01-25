@@ -25,6 +25,8 @@ unsigned int writeAnything(const T& value)
     {
         // the update function only writes to eeprom if the value it's writting is diferent from what's written
         // EEPROM.update(i, *p++);
+
+        // this emulated EEPROM library does not have the method update, but as it isnt an real EEPROM, its all right not to use the update method
         EEPROM.write(i, *p++);
     }
     return i;

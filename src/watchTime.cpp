@@ -3,25 +3,52 @@
 unsigned long lastTimeCheck = 0;
 int lastDayTime = 0;
 
-void handdleWatchTime()
+void handleWatchTime()
 {
     if(millis() - lastTimeCheck > timeBetweenTimeChecks)
     {
-        Serial.print("checking...");
         lastTimeCheck = millis();
 
         int now = getDayTime();
-        Serial.print(now);
-        Serial.print(" ");
         if(now != lastDayTime)
         {
+            if(now%50==0)
+            {
+                Serial.print("time: ");
+                Serial.println(now);
+            }
             // new minute!
-            checkEvents();
+
+            // continue only if programations are not paused
+            if(!areProgramationsPaused())
+            {
+                checkEvents(&now);
+            }
 
             lastDayTime = now;
         }
-        
-        Serial.println("");
     }
+}
 
+void pauseProgramations()
+{
+    d.areProgramationsPaused = true;
+    stopEvent();
+
+    storeEEPROMData();
+
+    Serial.println("programations paused");
+}
+void resumeProgramations()
+{
+    d.areProgramationsPaused = false;
+    
+    storeEEPROMData();
+
+    Serial.println("programations resumed");
+}
+
+bool areProgramationsPaused()
+{
+    return d.areProgramationsPaused;
 }

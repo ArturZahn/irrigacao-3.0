@@ -1,11 +1,16 @@
 #ifndef CONV_H
 #define CONV_H
 
-#include "time.h"
+#include "timeASD.h"
 #include "events.h"
 
-const unsigned int timeBetweenTimeChecks = 1000;
+// #define timeBetweenTimeChecks 1000
+#define timeBetweenTimeChecks 20
 
-void handdleWatchTime();
+void handleWatchTime();
+
+void pauseProgramations();
+void resumeProgramations();
+bool areProgramationsPaused();
 
 #endif

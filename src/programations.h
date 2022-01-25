@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 #include "protectedData.h"
+#include "sections.h"
+#include "timeASD.h"
 
 #define programationEmpty 255
 
@@ -24,16 +26,19 @@ class Programation
         void setSection(byte subProgramationNum, byte sectionNum);
         void setTimePerSection(byte subProgramationNum, unsigned int timePerSection);
         void setStatus(bool stt);
-        void setActivationTime(int activationTime);
+        void setActivationTime(byte activationTimeNum, int activationTime);
 
         byte getSection(byte subProgramationNum);
         unsigned int getTimePerSection(byte subProgramationNum);
         bool getStatus();
-        int getActivationTime();
+        int getActivationTime(byte activationTimeNum);
+
+        void triggerStartOfSubprogramation(byte subprogramationNum);
+        void triggerEndOfSubprogramation(byte subprogramationNum);
 
         void checkIfActivationTimeIsValid();
 
-        bool isNow();
+        bool isNow(int *now);
 };
 
 void initializeProgramations();

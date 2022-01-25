@@ -11,11 +11,12 @@
 struct protectedData
 {
     programationRawData programationsRawData[numOfProgramations];
+    bool areProgramationsPaused;
 };
 
 extern protectedData d;
 
-#define EEPROM_SIZE 150
+#define EEPROM_SIZE sizeof(d)
 
 void initializeEEPROM();
 
