@@ -7,8 +7,8 @@
 void checkEvents(int *now);
 byte findProgramationToStartNow(int *now);
 
-// #define subprogramationDurationMultiplier 60000 //in minutes
-#define subprogramationDurationMultiplier 1000 //in seconds
+#define subprogramationDurationMultiplier 60000 //in minutes
+// #define subprogramationDurationMultiplier 1000 //in seconds
 
 class eventClass
 {

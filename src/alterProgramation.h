@@ -10,5 +10,6 @@
 void showProgramations();
 void alterProgramation(String &args);
 byte ajustMax(int number, byte max);
+unsigned int ajustMaxuint(int number, unsigned int max);
 
 #endif

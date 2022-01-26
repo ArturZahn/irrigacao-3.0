@@ -171,7 +171,7 @@ void alterProgramation(String &args)
             return;
         }
 
-        durationsT[count] = ajustMax(thisArg.substring(thingIdx+1).toInt(), 255);
+        durationsT[count] = ajustMaxuint(thisArg.substring(thingIdx+1).toInt(), maxTimePerSection);
 
         count++;
         thingIdx = args.indexOf(F(";"));
@@ -227,6 +227,11 @@ void alterProgramation(String &args)
 }
 
 byte ajustMax(int number, byte max)
+{
+  if(number >= max) return max;
+  else return number;
+}
+unsigned int ajustMaxuint(int number, unsigned int max)
 {
   if(number >= max) return max;
   else return number;

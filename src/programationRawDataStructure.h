@@ -18,6 +18,8 @@
 #define memoryLossDetectionPos 4
 #define memoryLossDetectionMask 0xF
 
+#define maxTimePerSection 65535
+
 #define sectionEmpty 255
 // #define activationTimeMask 0x7FF
 #define activationTimeEmpty timeEmpty
