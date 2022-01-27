@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include "protectedData.h"
 #include "sections.h"
-#include "timeASD.h"
+#include "timeFuncs.h"
 
 #define programationEmpty 255
 

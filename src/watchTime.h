@@ -1,7 +1,7 @@
 #ifndef CONV_H
 #define CONV_H
 
-#include "timeASD.h"
+#include "timeFuncs.h"
 #include "events.h"
 
 // #define timeBetweenTimeChecks 1000

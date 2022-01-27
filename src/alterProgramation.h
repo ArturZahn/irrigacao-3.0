@@ -5,7 +5,7 @@
 #include "protectedData.h"
 #include "programations.h"
 #include "sections.h"
-#include "timeASD.h"
+#include "timeFuncs.h"
 
 void showProgramations();
 void alterProgramation(String &args);

@@ -2,7 +2,7 @@
 #include "watchTime.h"
 #include "programations.h"
 #include "serialControl.h"
-#include "timeASD.h"
+#include "timeFuncs.h"
 #include "rtc.h"
 
 void setup()

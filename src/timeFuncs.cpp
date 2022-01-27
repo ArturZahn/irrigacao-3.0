@@ -1,4 +1,4 @@
-#include "timeASD.h"
+#include "timeFuncs.h"
 
 unsigned long temporaryVar_time = 1577836800;
 unsigned long getTime()

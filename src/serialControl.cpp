@@ -87,10 +87,8 @@ void runCommand()
     
     else if(command == F("dispararProgramacao")) startEvent(args.toInt());
 
-    else if(command == F("reiniciar")) Serial.println("restartSystem();"); //restartSystem();
+    else if(command == F("reiniciar")) restartSystem();
 
-    // else if(command == F("calcularProximoEvento")) Serial.println("calcNextEvent();"); //calcNextEvent();
-    
     // else if(command == F("mostrarErros")) Serial.println("showErrors();"); //showErrors();
     
     // else if(command == F("limparErros")) Serial.println("clearErrors();"); //clearErrors();

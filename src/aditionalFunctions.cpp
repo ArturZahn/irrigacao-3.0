@@ -3,6 +3,5 @@
 void restartSystem()
 {
     Serial.println("Restart ESP...");
-    while(true){};
-    // ESP.restart();
+    ESP.restart();
 }

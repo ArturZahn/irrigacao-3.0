@@ -46,16 +46,14 @@ void showProgramations()
 
 void alterProgramation(String &args)
 {
-    // temporary data
-    byte orderT[numOfStages];
-    int triggersT[numOfTriggers];
-    byte durationsT[numOfStages];
-    for(byte i = 0; i < numOfTriggers; i++) triggersT[i] = 1500;
-    bool enabledT;
+    programationRawData tempProgRawData;
+    Programation tempProg;
+    tempProg.setProgramationRawDataPointer(&tempProgRawData);
     
     args.replace(F(" "), F(""));
-    byte programIdx;
+    byte programationIdx;
     
+    //this ↓ variable will be used for storing the index of many things
     int thingIdx = args.indexOf(F("->"));
     
     if(thingIdx == -1)
@@ -64,13 +62,13 @@ void alterProgramation(String &args)
         return;
     }
     
-    programIdx = ajustMax(byte(args.substring(0, thingIdx).toInt()), 255);
+    programationIdx = args.substring(0, thingIdx).toInt();
     args = args.substring(thingIdx+2);
     
-    if(programIdx >= numOfProgramations)
+    if(programationIdx >= numOfProgramations)
     {
         Serial.print(F("Erro, programacão "));
-        Serial.print(String(byte(programIdx)));
+        Serial.print(String(byte(programationIdx)));
         Serial.println(F(" não existe"));
         return;
     }
@@ -84,8 +82,8 @@ void alterProgramation(String &args)
     String argsTemp = args.substring(0, thingIdx);
     args = args.substring(thingIdx);
 
-    if(argsTemp == F("L") || argsTemp == F("l")) enabledT = true;
-    else if(argsTemp == F("D") || argsTemp == F("d")) enabledT = false;
+    if(argsTemp == F("L") || argsTemp == F("l")) tempProg.setStatus(true);
+    else if(argsTemp == F("D") || argsTemp == F("d")) tempProg.setStatus(false);
     else
     {
         Serial.print(F("Erro, "));
@@ -138,8 +136,7 @@ void alterProgramation(String &args)
             return;
         }
         
-        triggersT[count] = (thisArg.substring(0, thingIdx).toInt()*60)+thisArg.substring(thingIdx+1).toInt();
-        
+        tempProg.setTrigger(count, (thisArg.substring(0, thingIdx).toInt()*60)+thisArg.substring(thingIdx+1).toInt());
         count++;
         thingIdx = argsTemp.indexOf(F(","));
     }
@@ -161,17 +158,17 @@ void alterProgramation(String &args)
             Serial.println(F("Erro, algum setor não foi informado corretamente"));
             return;
         }
-        orderT[count] = ajustMax(thisArg.substring(0, thingIdx).toInt(), 255);
+        tempProg.setSectionOrder(count, thisArg.substring(0, thingIdx).toInt());
         
-        if(orderT[count] >= numOfSections && orderT[count] != sectionEmpty)
+        if(tempProg.getSectionOrder(count) >= numOfSections && tempProg.getSectionOrder(count) != sectionEmpty)
         {
             Serial.print(F("Erro, setor "));
-            Serial.print(String(orderT[count]));
+            Serial.print(String(tempProg.getSectionOrder(count)));
             Serial.println(F(" não existe"));
             return;
         }
 
-        durationsT[count] = ajustMaxuint(thisArg.substring(thingIdx+1).toInt(), maxDuration);
+        tempProg.setDuration(count, ajustMaxuint(thisArg.substring(thingIdx+1).toInt(), maxDuration));
 
         count++;
         thingIdx = args.indexOf(F(";"));
@@ -188,35 +185,35 @@ void alterProgramation(String &args)
         return;
     }
     Serial.print(F("Programação alterada: "));
-    Serial.print(String(byte(programIdx)));
+    Serial.print(String(byte(programationIdx)));
     Serial.print(F(" -> "));
 
 
-    Serial.print(enabledT?F("L"):F("D"));
-    getProgramation(programIdx).setStatus(enabledT);
+    Serial.print(tempProg.getStatus()?F("L"):F("D"));
+    getProgramation(programationIdx).setStatus(tempProg.getStatus());
 
     for(byte i = 0; i < numOfStages; i++)
     {
-        getProgramation(programIdx).setDuration(i, durationsT[i]);
-        getProgramation(programIdx).setSectionOrder(i, orderT[i]);
+        getProgramation(programationIdx).setSectionOrder(i, tempProg.getSectionOrder(i));
+        getProgramation(programationIdx).setDuration(i, tempProg.getDuration(i));
 
         Serial.print(F("{"));
-        Serial.print(String(orderT[i]));
+        Serial.print(tempProg.getSectionOrder(i));
         Serial.print(F(", "));
-        Serial.print(String(durationsT[i]));
+        Serial.print(tempProg.getDuration(i));
         Serial.print(F("}"));
     }
     Serial.print(F("-{"));
     bool first = true;
     for(int i = 0; i < numOfTriggers; i++)
     {
-        getProgramation(programIdx).setTrigger(i, triggersT[i]);
-        if(triggersT[i] <= 1439)
+        getProgramation(programationIdx).setTrigger(i, tempProg.getTrigger(i));
+        if(tempProg.getTrigger(i) <= 1439)
         {
             if(first) first = false;
             else Serial.print(F(", "));
-            byte minutes = triggersT[i]%60;
-            Serial.print(String((triggersT[i]-minutes)/60));
+            byte minutes = tempProg.getTrigger(i)%60;
+            Serial.print(String((tempProg.getTrigger(i)-minutes)/60));
             Serial.print(F(":"));
             Serial.print(String(minutes)+(minutes<10?F("0"):F("")));
         }
@@ -226,11 +223,6 @@ void alterProgramation(String &args)
     storeEEPROMData();
 }
 
-byte ajustMax(int number, byte max)
-{
-  if(number >= max) return max;
-  else return number;
-}
 unsigned int ajustMaxuint(int number, unsigned int max)
 {
   if(number >= max) return max;
