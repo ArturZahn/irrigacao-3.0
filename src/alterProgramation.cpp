@@ -16,24 +16,24 @@ void showProgramations()
         Serial.print(i);
         Serial.print(F(" -> "));
         Serial.print(getProgramation(i).getStatus()?F("L"):F("D"));
-        for(int j = 0; j < maxNumOfSubProgramations; j++)
+        for(int j = 0; j < numOfStages; j++)
         {
             Serial.print("{");
-            Serial.print(getProgramation(i).getSection(j));
+            Serial.print(getProgramation(i).getSectionOrder(j));
             Serial.print(", ");
-            Serial.print(getProgramation(i).getTimePerSection(j));
+            Serial.print(getProgramation(i).getDuration(j));
             Serial.print("}");
         }
         Serial.print(F("-{"));
         bool first = true;
-        for(int j = 0; j < maxNumOfActivationTimes; j++)
+        for(int j = 0; j < numOfTriggers; j++)
         {
-            if(getProgramation(i).getActivationTime(j) <= timeMax)
+            if(getProgramation(i).getTrigger(j) <= timeMax)
             {
                 if(first) first = false;
                 else Serial.print(", ");
-                byte minutes = getProgramation(i).getActivationTime(j)%60;
-                Serial.print((getProgramation(i).getActivationTime(j)-minutes)/60);
+                byte minutes = getProgramation(i).getTrigger(j)%60;
+                Serial.print((getProgramation(i).getTrigger(j)-minutes)/60);
                 Serial.print(F(":"));
                 if(minutes < 10) Serial.print(F("0"));
                 Serial.print(minutes);
@@ -47,10 +47,10 @@ void showProgramations()
 void alterProgramation(String &args)
 {
     // temporary data
-    byte orderT[maxNumOfSubProgramations];
-    int triggersT[maxNumOfActivationTimes];
-    byte durationsT[maxNumOfSubProgramations];
-    for(byte i = 0; i < maxNumOfActivationTimes; i++) triggersT[i] = 1500;
+    byte orderT[numOfStages];
+    int triggersT[numOfTriggers];
+    byte durationsT[numOfStages];
+    for(byte i = 0; i < numOfTriggers; i++) triggersT[i] = 1500;
     bool enabledT;
     
     args.replace(F(" "), F(""));
@@ -118,10 +118,10 @@ void alterProgramation(String &args)
     thingIdx = argsTemp.indexOf(F(","));
     while(thingIdx != -1)
     {
-        if(count >= maxNumOfActivationTimes)
+        if(count >= numOfTriggers)
         {
             Serial.print(F("Erro, apenas "));
-            Serial.print(String(maxNumOfActivationTimes));
+            Serial.print(String(numOfTriggers));
             Serial.print(F(" horários são permitidos ("));
             Serial.print(String(count+1));
             Serial.println(F(" foram detectados)"));
@@ -171,16 +171,16 @@ void alterProgramation(String &args)
             return;
         }
 
-        durationsT[count] = ajustMaxuint(thisArg.substring(thingIdx+1).toInt(), maxTimePerSection);
+        durationsT[count] = ajustMaxuint(thisArg.substring(thingIdx+1).toInt(), maxDuration);
 
         count++;
         thingIdx = args.indexOf(F(";"));
     }
 
-    if(count != maxNumOfSubProgramations)
+    if(count != numOfStages)
     {
         Serial.print(F("Erro, era esperado "));
-        Serial.print(String(maxNumOfSubProgramations));
+        Serial.print(String(numOfStages));
         Serial.print(F(" setores ("));
         Serial.print(String(count));
         Serial.println(F(" foram detectados)"));
@@ -195,10 +195,10 @@ void alterProgramation(String &args)
     Serial.print(enabledT?F("L"):F("D"));
     getProgramation(programIdx).setStatus(enabledT);
 
-    for(byte i = 0; i < maxNumOfSubProgramations; i++)
+    for(byte i = 0; i < numOfStages; i++)
     {
-        getProgramation(programIdx).setTimePerSection(i, durationsT[i]);
-        getProgramation(programIdx).setSection(i, orderT[i]);
+        getProgramation(programIdx).setDuration(i, durationsT[i]);
+        getProgramation(programIdx).setSectionOrder(i, orderT[i]);
 
         Serial.print(F("{"));
         Serial.print(String(orderT[i]));
@@ -208,9 +208,9 @@ void alterProgramation(String &args)
     }
     Serial.print(F("-{"));
     bool first = true;
-    for(int i = 0; i < maxNumOfActivationTimes; i++)
+    for(int i = 0; i < numOfTriggers; i++)
     {
-        getProgramation(programIdx).setActivationTime(i, triggersT[i]);
+        getProgramation(programIdx).setTrigger(i, triggersT[i]);
         if(triggersT[i] <= 1439)
         {
             if(first) first = false;

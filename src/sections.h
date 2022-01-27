@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #define numOfSections 4
+#define sectionEmpty 255
 
 #define commonPin 27
 #define pumpPin 14

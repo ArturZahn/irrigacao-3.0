@@ -43,23 +43,23 @@ void eventClass::start(Programation programationToStart)
     eventClass::activeProgamation = programationToStart;
     eventClass::setupNewEvent();
 
-    // Serial.print("sections: ");
-    // Serial.print(eventClass::activeProgamation.getSection(0));
+    // Serial.print("sections order: ");
+    // Serial.print(eventClass::activeProgamation.getSectionOrder(0));
     // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getSection(1));
+    // Serial.print(eventClass::activeProgamation.getSectionOrder(1));
     // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getSection(2));
+    // Serial.print(eventClass::activeProgamation.getSectionOrder(2));
     // Serial.print("|");
-    // Serial.println(eventClass::activeProgamation.getSection(3));
+    // Serial.println(eventClass::activeProgamation.getSectionOrder(3));
     
     // Serial.print("durations: ");
-    // Serial.print(eventClass::activeProgamation.getTimePerSection(0));
+    // Serial.print(eventClass::activeProgamation.getDuration(0));
     // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getTimePerSection(1));
+    // Serial.print(eventClass::activeProgamation.getDuration(1));
     // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getTimePerSection(2));
+    // Serial.print(eventClass::activeProgamation.getDuration(2));
     // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getTimePerSection(3));
+    // Serial.print(eventClass::activeProgamation.getDuration(3));
 
 
 }
@@ -67,14 +67,14 @@ void eventClass::start(Programation programationToStart)
 void eventClass::setupNewEvent()
 {
     eventClass::isThereEventRunning = true;
-    eventClass::subprogramationCurrentStage = 0;
+    eventClass::stagesCurrentStage = 0;
 
     eventClass::setupCurrentStage();
 }
 
 unsigned long eventClass::getDurationOfCurrentStage()
 {
-    return eventClass::activeProgamation.getTimePerSection(eventClass::subprogramationCurrentStage) * subprogramationDurationMultiplier;
+    return eventClass::activeProgamation.getDuration(eventClass::stagesCurrentStage) * stageDurationMultiplier;
 }
 
 void eventClass::handle()
@@ -83,31 +83,31 @@ void eventClass::handle()
     {
         if(millis() - eventClass::stageStartTime > eventClass::durationOfCurrentStage)
         {
-            eventClass::triggerEndOfCurrentSubprogramation();
+            eventClass::fireEndOfCurrentStage();
             eventClass::changeToNextStage();
         }
     }
 }
 
-void eventClass::triggerStartOfCurrentSubprogramation()
+void eventClass::fireStartOfCurrentStage()
 {
-    Serial.print("Start of subprogramation ");
-    Serial.println(eventClass::subprogramationCurrentStage);
-    eventClass::activeProgamation.triggerStartOfSubprogramation(eventClass::subprogramationCurrentStage);
+    Serial.print("Start of stage ");
+    Serial.println(eventClass::stagesCurrentStage);
+    eventClass::activeProgamation.fireStartOfStage(eventClass::stagesCurrentStage);
 }
 
-void eventClass::triggerEndOfCurrentSubprogramation()
+void eventClass::fireEndOfCurrentStage()
 {
-    Serial.print("End of subprogramation ");
-    Serial.println(eventClass::subprogramationCurrentStage);
-    eventClass::activeProgamation.triggerEndOfSubprogramation(eventClass::subprogramationCurrentStage);
+    Serial.print("End of stage ");
+    Serial.println(eventClass::stagesCurrentStage);
+    eventClass::activeProgamation.fireEndOfStage(eventClass::stagesCurrentStage);
 }
 
 void eventClass::changeToNextStage()
 {
-    eventClass::subprogramationCurrentStage++;
+    eventClass::stagesCurrentStage++;
 
-    if(eventClass::subprogramationCurrentStage == maxNumOfSubProgramations)
+    if(eventClass::stagesCurrentStage == numOfStages)
     {
         // there is no next programation stage
         eventClass::stopEvent();
@@ -122,13 +122,13 @@ void eventClass::setupCurrentStage()
     durationOfCurrentStage = eventClass::getDurationOfCurrentStage();
     eventClass::stageStartTime = millis();
 
-    eventClass::triggerStartOfCurrentSubprogramation();
+    eventClass::fireStartOfCurrentStage();
 }
 
 void eventClass::stopEvent()
 {
     eventClass::isThereEventRunning = false;
-    eventClass::subprogramationCurrentStage = 0;
+    eventClass::stagesCurrentStage = 0;
     eventClass::durationOfCurrentStage = 0;
 }
 

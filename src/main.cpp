@@ -20,19 +20,19 @@ void setup()
     // {
         
     //     getProgramation(prog).setStatus(false);
-    //     for(byte actTm = 0; actTm < maxNumOfActivationTimes; actTm++)
+    //     for(byte actTm = 0; actTm < numOfTriggers; actTm++)
     //     {
-    //         getProgramation(prog).setActivationTime(actTm, activationTimeEmpty);
-    //         // getProgramation(prog).setActivationTime(actTm, (prog+2)*100 + actTm*2);
+    //         getProgramation(prog).setTrigger(actTm, triggerEmpty);
+    //         // getProgramation(prog).setTrigger(actTm, (prog+2)*100 + actTm*2);
     //     }
         
-    //     for(byte subprogNum = 0; subprogNum < maxNumOfSubProgramations; subprogNum++)
+    //     for(byte subprogNum = 0; subprogNum < numOfStages; subprogNum++)
     //     {
-    //         getProgramation(prog).setSection(subprogNum, sectionEmpty);
-    //         getProgramation(prog).setTimePerSection(subprogNum, 0);
+    //         getProgramation(prog).setSectionOrder(subprogNum, sectionEmpty);
+    //         getProgramation(prog).setDuration(subprogNum, 0);
 
-    //         // getProgramation(prog).setSection(subprogNum, subprogNum+10);
-    //         // getProgramation(prog).setTimePerSection(subprogNum, (subprogNum*2)+10);
+    //         // getProgramation(prog).setSectionOrder(subprogNum, subprogNum+10);
+    //         // getProgramation(prog).setDuration(subprogNum, (subprogNum*2)+10);
     //     }
     //     Serial.println("\n");
     // }

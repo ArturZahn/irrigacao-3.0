@@ -55,6 +55,7 @@ void digiWrite(byte pin, bool stt)
 void activateSection(byte sectionNum)
 {
     deactivateAllSections();
+    if(sectionNum >= numOfSections || sectionNum == sectionEmpty) return; // do not enable any section if sectionNum is invalid
     
     digiWrite(commonPin, HIGH);
     digiWrite(pumpPin, HIGH);

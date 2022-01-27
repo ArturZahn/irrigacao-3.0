@@ -10,33 +10,6 @@ void Programation::setProgramationRawDataPointer(programationRawData *_rd)
 
 void Programation::checkMemoryLossAndCorrect()
 {
-    // get statusAndActivationTime value:
-    // (*Programation::rawData).statusAndActivationTime 
-
-    // shift it
-    // (*Programation::rawData).statusAndActivationTime>>memoryLossDetectionPos
-
-    // select just the right bits
-    // ((*Programation::rawData).statusAndActivationTime>>memoryLossDetectionPos)&memoryLossDetectionMask
-
-    // check if its different than the defined sequence
-    // (((*Programation::rawData).statusAndActivationTime>>memoryLossDetectionPos)&memoryLossDetectionMask) != memoryLossDetectionSequence
-
-    
-
-    // if the memory loss detection sequence isnt right (how does this 'if' work? look above)
-    // if((((*Programation::rawData).statusAndActivationTime>>memoryLossDetectionPos)&memoryLossDetectionMask) != memoryLossDetectionSequence)
-
-    // (*Programation::rawData).statusAndMemoryLossDetectionSequence = 0xA0;
-
-    // Serial.println("extracting: ");
-    // Serial.println((*Programation::rawData).statusAndMemoryLossDetectionSequence, BIN);
-    // Serial.println((*Programation::rawData).statusAndMemoryLossDetectionSequence>>memoryLossDetectionPos, BIN);
-    // Serial.println(((*Programation::rawData).statusAndMemoryLossDetectionSequence>>memoryLossDetectionPos)&memoryLossDetectionMask, BIN);
-    // Serial.println("result: ");
-    // Serial.println((((*Programation::rawData).statusAndMemoryLossDetectionSequence>>memoryLossDetectionPos)&memoryLossDetectionMask) == memoryLossDetectionSequence, BIN);
-
-
     // if the memory loss detection sequence isnt right
     if((((*Programation::rawData).statusAndMemoryLossDetectionSequence>>memoryLossDetectionPos)&memoryLossDetectionMask) != memoryLossDetectionSequence)
     {
@@ -47,78 +20,71 @@ void Programation::checkMemoryLossAndCorrect()
     }
     
 
-    Programation::checkIfActivationTimeIsValid();
+    Programation::checkIfTriggerIsValid();
     
 }
 
 void Programation::resetData()
 {
-    for(byte i = 0; i < maxNumOfSubProgramations; i++)
+    for(byte i = 0; i < numOfStages; i++)
     {
-        (*Programation::rawData).sections[i] = sectionEmpty;
-        (*Programation::rawData).timePerSection[i] = 0;
+        (*Programation::rawData).sectionsOrder[i] = sectionEmpty;
+        (*Programation::rawData).duration[i] = 0;
     }
 
-    // (*Programation::rawData).statusAndActivationTime = (memoryLossDetectionSequence<<memoryLossDetectionPos)|activationTimeEmpty;
     (*Programation::rawData).statusAndMemoryLossDetectionSequence = (memoryLossDetectionSequence<<memoryLossDetectionPos);
 }
 
-void Programation::setSection(byte subProgramationNum, byte sectionNum)
+void Programation::setSectionOrder(byte stageNum, byte sectionOrderNum)
 {
-    (*Programation::rawData).sections[subProgramationNum] = sectionNum;
+    (*Programation::rawData).sectionsOrder[stageNum] = sectionOrderNum;
 }
 
-void Programation::setTimePerSection(byte subProgramationNum, unsigned int timePerSection)
+void Programation::setDuration(byte stageNum, unsigned int duration)
 {
-    (*Programation::rawData).timePerSection[subProgramationNum] = timePerSection;
+    (*Programation::rawData).duration[stageNum] = duration;
 }
 
 void Programation::setStatus(bool stt)
 {
-    // bitWrite((*Programation::rawData).statusAndActivationTime, statusBit, stt);
     bitWrite((*Programation::rawData).statusAndMemoryLossDetectionSequence, statusBit, stt);
 }
 
-void Programation::setActivationTime(byte activationTimeNum, int activationTime)
+void Programation::setTrigger(byte triggerNum, int trigger)
 {
-    // (*Programation::rawData).statusAndActivationTime &= ~activationTimeMask;
-    // (*Programation::rawData).statusAndActivationTime |= activationTime&activationTimeMask;
+    (*Programation::rawData).trigger[triggerNum] = trigger;
 
-    (*Programation::rawData).activationTime[activationTimeNum] = activationTime;
-
-    Programation::checkIfActivationTimeIsValid();
+    Programation::checkIfTriggerIsValid();
 }
 
-byte Programation::getSection(byte subProgramationNum)
+byte Programation::getSectionOrder(byte stageNum)
 {
-    return (*Programation::rawData).sections[subProgramationNum];
+    return (*Programation::rawData).sectionsOrder[stageNum];
 }
 
-unsigned int Programation::getTimePerSection(byte subProgramationNum)
+unsigned int Programation::getDuration(byte stageNum)
 {
-    return (*Programation::rawData).timePerSection[subProgramationNum];
+    return (*Programation::rawData).duration[stageNum];
 }
 
 bool Programation::getStatus()
 {
-    // just get the 5th most significant bit of rawData.statusAndActivationTime
-    // return bitRead((*Programation::rawData).statusAndActivationTime, statusBit);
     return bitRead((*Programation::rawData).statusAndMemoryLossDetectionSequence, statusBit);
 }
 
-int Programation::getActivationTime(byte activationTimeNum)
+int Programation::getTrigger(byte triggerNum)
 {
-    return (*Programation::rawData).activationTime[activationTimeNum];
+    return (*Programation::rawData).trigger[triggerNum];
 }
 
-void Programation::checkIfActivationTimeIsValid()
+void Programation::checkIfTriggerIsValid()
 {
-    for(byte i = 0; i < maxNumOfActivationTimes; i++)
+    for(byte i = 0; i < numOfTriggers; i++)
     {
-        int actTm = Programation::getActivationTime(i);
-        if(actTm > timeMax && actTm != activationTimeEmpty)
+        int actTm = Programation::getTrigger(i);
+        if(actTm > timeMax && actTm != triggerEmpty)
         {
-            Programation::setActivationTime(i, activationTimeEmpty);
+            Programation::setTrigger(i, triggerEmpty);
         }
     }
     
@@ -126,21 +92,20 @@ void Programation::checkIfActivationTimeIsValid()
 
 bool Programation::isNow(int *now)
 {
-    for(byte i = 0; i < maxNumOfActivationTimes; i++)
+    for(byte i = 0; i < numOfTriggers; i++)
     {
-        int actTm = Programation::getActivationTime(i);
-        if(actTm != activationTimeEmpty && actTm == *now) return true;
+        int actTm = Programation::getTrigger(i);
+        if(actTm != triggerEmpty && actTm == *now) return true;
     }
-    // return Programation::getActivationTime() == 
     return false;
 }
 
-void Programation::triggerStartOfSubprogramation(byte subprogramationNum)
+void Programation::fireStartOfStage(byte stageNum)
 {
-    activateSection(Programation::getSection(subprogramationNum));
+    activateSection(Programation::getSectionOrder(stageNum));
 }
 
-void Programation::triggerEndOfSubprogramation(byte subprogramationNum)
+void Programation::fireEndOfStage(byte stageNum)
 {
     deactivateAllSections();
 }

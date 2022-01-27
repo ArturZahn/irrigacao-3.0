@@ -23,20 +23,20 @@ class Programation
         void checkMemoryLossAndCorrect();
         void resetData();
 
-        void setSection(byte subProgramationNum, byte sectionNum);
-        void setTimePerSection(byte subProgramationNum, unsigned int timePerSection);
+        void setSectionOrder(byte stageNum, byte sectionOrderNum);
+        void setDuration(byte stageNum, unsigned int duration);
         void setStatus(bool stt);
-        void setActivationTime(byte activationTimeNum, int activationTime);
+        void setTrigger(byte triggerNum, int trigger);
 
-        byte getSection(byte subProgramationNum);
-        unsigned int getTimePerSection(byte subProgramationNum);
+        byte getSectionOrder(byte stageNum);
+        unsigned int getDuration(byte stageNum);
         bool getStatus();
-        int getActivationTime(byte activationTimeNum);
+        int getTrigger(byte triggerNum);
 
-        void triggerStartOfSubprogramation(byte subprogramationNum);
-        void triggerEndOfSubprogramation(byte subprogramationNum);
+        void fireStartOfStage(byte stageNum);
+        void fireEndOfStage(byte stageNum);
 
-        void checkIfActivationTimeIsValid();
+        void checkIfTriggerIsValid();
 
         bool isNow(int *now);
 };

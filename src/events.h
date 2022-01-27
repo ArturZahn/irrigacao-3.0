@@ -7,8 +7,8 @@
 void checkEvents(int *now);
 byte findProgramationToStartNow(int *now);
 
-#define subprogramationDurationMultiplier 60000 //in minutes
-// #define subprogramationDurationMultiplier 1000 //in seconds
+#define stageDurationMultiplier 60000 //in minutes
+// #define stageDurationMultiplier 1000 //in seconds
 
 class eventClass
 {
@@ -17,7 +17,7 @@ class eventClass
     bool isThereEventRunning;
     Programation activeProgamation;
 
-    byte subprogramationCurrentStage;
+    byte stagesCurrentStage;
     unsigned long durationOfCurrentStage;
     unsigned long stageStartTime;
 
@@ -25,8 +25,8 @@ class eventClass
     unsigned long getDurationOfCurrentStage();
     void changeToNextStage();
     void setupCurrentStage();
-    void triggerStartOfCurrentSubprogramation();
-    void triggerEndOfCurrentSubprogramation();
+    void fireStartOfCurrentStage();
+    void fireEndOfCurrentStage();
 
     public:
 
