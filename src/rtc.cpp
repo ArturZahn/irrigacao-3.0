@@ -4,7 +4,7 @@ RTClib myRTC;
 
 DateTime t;
 
-void ASDASDRTC()
+void initRTC()
 {
 
     Wire.begin();

@@ -1,12 +1,25 @@
 #include "timeFuncs.h"
 
-unsigned long temporaryVar_time = 1577836800;
+// unsigned long temporaryVar_time = 1577836800;
 unsigned long getTime()
 {
-    checkIfRTCIsWorking();
-    return readTimeFromRTC();
     // temporaryVar_time += 60;
     // return temporaryVar_time;
+
+    byte i = 0;
+    while(!checkIfRTCIsWorking())
+    {
+        i++;
+        initRTC();
+
+        if(i >= numbOfRetriesConnecRTC) 
+        {
+            Serial.println("failed reading RTC time");
+            restartSystem();
+        }
+    }
+
+    return readTimeFromRTC();
 }
 
 unsigned int getDayTime()

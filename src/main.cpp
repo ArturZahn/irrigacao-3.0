@@ -10,7 +10,7 @@ void setup()
     Serial.begin(115200);
 
     initSections();
-    ASDASDRTC();
+    initRTC();
     initializeEEPROM();
     readEEPROMData();
     initializeProgramations();

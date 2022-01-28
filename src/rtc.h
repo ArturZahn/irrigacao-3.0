@@ -8,7 +8,7 @@
 #include <DS3231.h>
 
 
-void ASDASDRTC();
+void initRTC();
 int readTimeFromRTC();
 bool checkIfRTCIsWorking();
 
