@@ -1,0 +1,9 @@
+numOfStages: 4
+numOfTriggers: 5
+numOfProgramations: 5
+numOfSections: 4
+programationEmpty: 255
+sectionEmpty: 255
+maxDuration: 65535
+areProgramationsPaused: 0
+manuallyActivatedSector: 255
