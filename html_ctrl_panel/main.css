@@ -1,0 +1,172 @@
+* {
+    outline: 0;
+
+    --bg1: #121212;
+    --bg2: #1d1d1d;
+    --bg3: #3b3b3b;
+    --bg4: #5a5a5a;
+    --bg5: #727272;
+    --color1: #84a1ff;
+
+    --bg-popup: #3b3b3b80;
+
+    --textDefault: #fff;
+    --textLightGray: #969696;
+}
+
+input {
+    background-color: var(--bg1);
+    color: var(--textDefault);
+    border-radius: .5rem;
+    padding: .2rem .4rem;
+    border: none;
+}
+input[type=button] {
+    background-color: var(--color1);
+    padding: 0.3rem 0.8rem;
+    color: var(--bg1);
+}
+input[type="time"]::-webkit-calendar-picker-indicator{
+  filter: invert(100%) ;
+}
+.text-light-gray {
+    color: var(--textLightGray);
+}
+
+body {
+    background-color: var(--bg1);
+    color: var(--textDefault);
+    font-size: 1.2rem;
+    /* background-color: #1d1d1d; */
+}
+.header {
+    background-color: var(--bg2);
+    padding: 10px 15px;
+    color: var(--color1);
+    display: flex;
+    align-items: center;
+    /* background-color: rgb(0, 0, 180); */
+}
+.header h1 {
+    margin: 0;
+}
+.returnArrow {
+    font-size: 2rem;
+    font-family: emoji;
+    margin-right: 2rem;
+    transform: scale(2);
+}
+.card {
+    background-color: var(--bg2);
+    padding: 10px 15px;
+}
+span.chb {
+    display: inline-block;
+    width: 2rem;
+    height: 1rem;
+    border-radius: .5rem;
+    background-color: var(--bg3);
+    padding: 0;
+    position: relative;
+    top: .3rem;
+}
+span.chb > span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: .5rem;
+    background-color: var(--bg5);
+    padding: 0;
+    margin: 0;
+    transition: margin 100ms, background-color 100ms;
+}
+input.chb {
+    display: none;
+}
+input.chb:checked + label span.chb > span {
+    margin-left: 1rem;
+    background-color: var(--color1);
+}
+.lineBetweenRows > .row:not(:first-child) {
+    position: relative;
+}
+.lineBetweenRows > .row:not(:first-child)::before {
+    content: "";
+    background-color: var(--bg3);
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin: 1px 10px;
+}
+.spacingBetweenRows .row > * {
+    /* border: 1px solid #0f0; */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+#programations {
+    user-select: none;
+}
+
+.page {
+    background-color: var(--bg1);
+}
+#orderDuratContainer > * > * > input + input {
+    margin-left: 5px;
+}
+#orderDuratContainer > * > *  input {
+    width: 4rem;
+    /* border: 1px solid #f00; */
+}
+
+#timesContainer > * > *  input {
+    width: 6rem;
+    /* border: 1px solid #f00; */
+}
+#orderDuratContainer > *,
+#timesContainer > * {
+    justify-content: center;
+}
+
+.containerButtons {
+    padding: 0 0 0.3rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-popup);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.popupBody {
+    background-color: var(--bg1);
+    padding: 0.5rem 1rem;
+    max-height: 100vh;
+    overflow: auto;
+}
+.pageContainer {
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.popupBeforeBotoes > * > *,
+.popupBotoes > * > * {
+    margin: .4rem 0;
+    display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
+    justify-content: stretch;
+}
+.popupVoid {
+    flex-grow: 1;
+}
