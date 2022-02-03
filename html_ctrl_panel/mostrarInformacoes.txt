@@ -1,3 +1,4 @@
+OK
 numOfStages: 4
 numOfTriggers: 5
 numOfProgramations: 5
@@ -7,3 +8,5 @@ sectionEmpty: 255
 maxDuration: 65535
 areProgramationsPaused: 0
 manuallyActivatedSector: 255
+automaticProgramationRunning: 1
+defaultManualSection: 1
