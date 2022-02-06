@@ -15,8 +15,8 @@ void handleWatchTime()
             // new minute!
             // if(now%50==0)
             // {
-                Serial.print("time: ");
-                Serial.println(now);
+                NBprint("time: ");
+                NBprintln(now);
             // }
 
             // continue only if programations are not paused
@@ -36,16 +36,12 @@ void pauseProgramations()
     stopEvent();
 
     storeEEPROMData();
-
-    Serial.println("programations paused");
 }
 void resumeProgramations()
 {
     d.areProgramationsPaused = false;
     
     storeEEPROMData();
-
-    Serial.println("programations resumed");
 }
 
 bool areProgramationsPaused()

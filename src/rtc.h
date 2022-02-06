@@ -6,6 +6,7 @@
 
 #include <Wire.h>
 #include <DS3231.h>
+#include "handlePrint.h"
 
 
 void initRTC();

@@ -2,14 +2,13 @@
 #define SERIAL_H
 
 #include <Arduino.h>
-#include "alterProgramation.h"
-#include "watchTime.h"
-#include "wifiHandler.h"
+#include "handlePrint.h"
+#include "cli.h"
 
 #define sizeOfCommand 256
 
 void handleSerialControl();
 void clearCommand();
-void runCommand();
+void runSerialCommand();
 
 #endif

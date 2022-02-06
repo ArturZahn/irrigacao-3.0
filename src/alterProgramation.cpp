@@ -2,46 +2,46 @@
 
 void showProgramations()
 {
-    Serial.println("status:");
+    CMDprintln("status:");
     for(byte prog = 0; prog < numOfProgramations; prog++)
     {
-        Serial.print(getProgramation(prog).getStatus(), BIN);
-        Serial.print(" ");
+        CMDprint(getProgramation(prog).getStatus());
+        CMDprint(" ");
     }
-    Serial.println();
+    CMDprintln();
     
-    Serial.println(F("Programações:"));
+    CMDprintln(F("Programações:"));
     for(int i = 0; i < numOfProgramations; i++)
     {
-        Serial.print(i);
-        Serial.print(F(" -> "));
-        Serial.print(getProgramation(i).getStatus()?F("L"):F("D"));
+        CMDprint(i);
+        CMDprint(F(" -> "));
+        CMDprint(getProgramation(i).getStatus()?F("L"):F("D"));
         for(int j = 0; j < numOfStages; j++)
         {
-            Serial.print("{");
-            Serial.print(getProgramation(i).getSectionOrder(j));
-            Serial.print(", ");
-            Serial.print(getProgramation(i).getDuration(j));
-            Serial.print("}");
+            CMDprint("{");
+            CMDprint(getProgramation(i).getSectionOrder(j));
+            CMDprint(", ");
+            CMDprint(getProgramation(i).getDuration(j));
+            CMDprint("}");
         }
-        Serial.print(F("-{"));
+        CMDprint(F("-{"));
         bool first = true;
         for(int j = 0; j < numOfTriggers; j++)
         {
             if(getProgramation(i).getTrigger(j) <= timeMax)
             {
                 if(first) first = false;
-                else Serial.print(", ");
+                else CMDprint(", ");
                 byte minutes = getProgramation(i).getTrigger(j)%60;
-                Serial.print((getProgramation(i).getTrigger(j)-minutes)/60);
-                Serial.print(F(":"));
-                if(minutes < 10) Serial.print(F("0"));
-                Serial.print(minutes);
+                CMDprint((getProgramation(i).getTrigger(j)-minutes)/60);
+                CMDprint(F(":"));
+                if(minutes < 10) CMDprint(F("0"));
+                CMDprint(minutes);
             }
         }
-        Serial.println(F("}"));
+        CMDprintln(F("}"));
     }
-    Serial.print(F("\n"));
+    CMDprint(F("\n"));
 }
 
 void alterProgramation(String &args)
@@ -58,7 +58,7 @@ void alterProgramation(String &args)
     
     if(thingIdx == -1)
     {
-        Serial.println(F("Erro, seta '->' não encontrada"));
+        CMDprintln(F("Erro, seta '->' não encontrada"));
         return;
     }
     
@@ -67,16 +67,16 @@ void alterProgramation(String &args)
     
     if(programationIdx >= numOfProgramations)
     {
-        Serial.print(F("Erro, programacão "));
-        Serial.print(String(byte(programationIdx)));
-        Serial.println(F(" não existe"));
+        CMDprint(F("Erro, programacão "));
+        CMDprint(String(byte(programationIdx)));
+        CMDprintln(F(" não existe"));
         return;
     }
 
     thingIdx = args.indexOf(F("{"));
     if(thingIdx == -1)
     {
-        Serial.println(F("Erro, primeira chave '{' não encontrada"));
+        CMDprintln(F("Erro, primeira chave '{' não encontrada"));
         return;
     }
     String argsTemp = args.substring(0, thingIdx);
@@ -86,22 +86,22 @@ void alterProgramation(String &args)
     else if(argsTemp == F("D") || argsTemp == F("d")) tempProg.setStatus(false);
     else
     {
-        Serial.print(F("Erro, "));
-        if(argsTemp == "") Serial.print(F("o estado da programação não foi encontrado"));
+        CMDprint(F("Erro, "));
+        if(argsTemp == "") CMDprint(F("o estado da programação não foi encontrado"));
         else
         {
-            Serial.print("'");
-            Serial.print(String(argsTemp));
-            Serial.print(F("' não é um estado válido"));
+            CMDprint("'");
+            CMDprint(String(argsTemp));
+            CMDprint(F("' não é um estado válido"));
         }
-        Serial.println(F(" (esperado 'L' ligado ou 'D' desligado"));
+        CMDprintln(F(" (esperado 'L' ligado ou 'D' desligado"));
         return;
     }
 
     thingIdx = args.indexOf("-");
     if(thingIdx == -1)
     {
-        Serial.println(F("Erro, traco '-' não encontrado"));
+        CMDprintln(F("Erro, traco '-' não encontrado"));
         return;
     }
     argsTemp = args.substring(thingIdx+1);
@@ -118,11 +118,11 @@ void alterProgramation(String &args)
     {
         if(count >= numOfTriggers)
         {
-            Serial.print(F("Erro, apenas "));
-            Serial.print(String(numOfTriggers));
-            Serial.print(F(" horários são permitidos ("));
-            Serial.print(String(count+1));
-            Serial.println(F(" foram detectados)"));
+            CMDprint(F("Erro, apenas "));
+            CMDprint(String(numOfTriggers));
+            CMDprint(F(" horários são permitidos ("));
+            CMDprint(String(count+1));
+            CMDprintln(F(" foram detectados)"));
             return;
         }
         
@@ -132,7 +132,7 @@ void alterProgramation(String &args)
         thingIdx = thisArg.indexOf(F(":"));
         if(thingIdx == -1)
         {
-            Serial.println(F("Erro, algum horário não foi informado corretamente"));
+            CMDprintln(F("Erro, algum horário não foi informado corretamente"));
             return;
         }
         
@@ -155,16 +155,16 @@ void alterProgramation(String &args)
         thingIdx = thisArg.indexOf(F(","));
         if(thingIdx == -1)
         {
-            Serial.println(F("Erro, algum setor não foi informado corretamente"));
+            CMDprintln(F("Erro, algum setor não foi informado corretamente"));
             return;
         }
         tempProg.setSectionOrder(count, thisArg.substring(0, thingIdx).toInt());
         
         if(tempProg.getSectionOrder(count) >= numOfSections && tempProg.getSectionOrder(count) != sectionEmpty)
         {
-            Serial.print(F("Erro, setor "));
-            Serial.print(String(tempProg.getSectionOrder(count)));
-            Serial.println(F(" não existe"));
+            CMDprint(F("Erro, setor "));
+            CMDprint(String(tempProg.getSectionOrder(count)));
+            CMDprintln(F(" não existe"));
             return;
         }
 
@@ -176,20 +176,20 @@ void alterProgramation(String &args)
 
     if(count != numOfStages)
     {
-        Serial.print(F("Erro, era esperado "));
-        Serial.print(String(numOfStages));
-        Serial.print(F(" setores ("));
-        Serial.print(String(count));
-        Serial.println(F(" foram detectados)"));
+        CMDprint(F("Erro, era esperado "));
+        CMDprint(String(numOfStages));
+        CMDprint(F(" setores ("));
+        CMDprint(String(count));
+        CMDprintln(F(" foram detectados)"));
 
         return;
     }
-    Serial.print(F("Programação alterada: "));
-    Serial.print(String(byte(programationIdx)));
-    Serial.print(F(" -> "));
+    CMDprint(F("Programação alterada: "));
+    CMDprint(String(byte(programationIdx)));
+    CMDprint(F(" -> "));
 
 
-    Serial.print(tempProg.getStatus()?F("L"):F("D"));
+    CMDprint(tempProg.getStatus()?F("L"):F("D"));
     getProgramation(programationIdx).setStatus(tempProg.getStatus());
 
     for(byte i = 0; i < numOfStages; i++)
@@ -197,13 +197,13 @@ void alterProgramation(String &args)
         getProgramation(programationIdx).setSectionOrder(i, tempProg.getSectionOrder(i));
         getProgramation(programationIdx).setDuration(i, tempProg.getDuration(i));
 
-        Serial.print(F("{"));
-        Serial.print(tempProg.getSectionOrder(i));
-        Serial.print(F(", "));
-        Serial.print(tempProg.getDuration(i));
-        Serial.print(F("}"));
+        CMDprint(F("{"));
+        CMDprint(tempProg.getSectionOrder(i));
+        CMDprint(F(", "));
+        CMDprint(tempProg.getDuration(i));
+        CMDprint(F("}"));
     }
-    Serial.print(F("-{"));
+    CMDprint(F("-{"));
     bool first = true;
     for(int i = 0; i < numOfTriggers; i++)
     {
@@ -211,14 +211,14 @@ void alterProgramation(String &args)
         if(tempProg.getTrigger(i) <= 1439)
         {
             if(first) first = false;
-            else Serial.print(F(", "));
+            else CMDprint(F(", "));
             byte minutes = tempProg.getTrigger(i)%60;
-            Serial.print(String((tempProg.getTrigger(i)-minutes)/60));
-            Serial.print(F(":"));
-            Serial.print(String(minutes)+(minutes<10?F("0"):F("")));
+            CMDprint(String((tempProg.getTrigger(i)-minutes)/60));
+            CMDprint(F(":"));
+            CMDprint(String(minutes)+(minutes<10?F("0"):F("")));
         }
     }
-    Serial.println(F("}"));
+    CMDprintln(F("}"));
     
     storeEEPROMData();
 }

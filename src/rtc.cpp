@@ -12,11 +12,11 @@ void initRTC()
 
     if(checkIfRTCIsWorking())
     {
-        Serial.println("RTC is working!");
+        NBprintln("RTC is working!");
     }
     else
     {
-        Serial.println("RTC isnt working");
+        NBprintln("RTC isnt working");
     }
 }
 

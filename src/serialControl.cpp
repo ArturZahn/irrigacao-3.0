@@ -14,7 +14,7 @@ void handleSerialControl()
             {
             case '\n':
                 Serial.print("\r\n");
-                runCommand();
+                runSerialCommand();
                 clearCommand();
                 break;
 
@@ -32,9 +32,10 @@ void handleSerialControl()
             default:
                 if(currentCarriagePos >= sizeOfCommand)
                 {
-                    Serial.print("\nError, command exceeds the ");
-                    Serial.print(sizeOfCommand);
-                    Serial.println(" characters limit");
+                    Serial.println();
+                    CMDprint("Error, command exceeds the ");
+                    CMDprint(sizeOfCommand);
+                    CMDprintln(" characters limit");
                     
                     clearCommand();
                 }
@@ -56,49 +57,7 @@ void clearCommand()
     currentCarriagePos = 0;
 }
 
-void runCommand()
+void runSerialCommand()
 {
-    String command = String(fullCommand);
-    String args = "";
-
-    int spcIdx = command.indexOf(F(" "));
-    if(spcIdx != -1)
-    {
-        args = command.substring(spcIdx+1);
-        command = command.substring(0, spcIdx);
-    }
-
-    
-    if(command == F("mostrarProgramacoes")) showProgramations();
-    
-    else if(command == F("alterarProgramacao")) alterProgramation(args);
-
-    // else if(command == F("mostrarHora")) Serial.println("showTime();"); //showTime();
-    
-    // else if(command == F("ajustarHora")) Serial.println("ajustTime(args);"); //ajustTime(args);
-    
-    else if(command == F("pausarProgramacoes")) pauseProgramations();
-    
-    else if(command == F("retomarProgramacoes")) resumeProgramations();
-    
-    // else if(command == F("mostrarSetorManual")) Serial.println("showManualSetor();"); //showManualSetor();
-    
-    // else if(command == F("alterarSetorManual")) Serial.println("alterManualSetor(args);"); //alterManualSetor(args);
-    
-    else if(command == F("dispararProgramacao")) startEvent(args.toInt());
-
-    else if(command == F("reiniciar")) restartSystem();
-
-    else if(command == F("wifi")) exeWifiCommand(args);
-
-    // else if(command == F("mostrarErros")) Serial.println("showErrors();"); //showErrors();
-    
-    // else if(command == F("limparErros")) Serial.println("clearErrors();"); //clearErrors();
-    
-    else
-    {
-        Serial.print(F("Erro, comando '"));
-        Serial.print(command);
-        Serial.println(F("' não existe"));
-    }
+    cliRunCommand(fullCommand, CLI_SOURCE_SERIAL);
 }

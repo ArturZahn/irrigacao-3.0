@@ -1,6 +1,6 @@
 #include "wifiHandler.h"
 
-WebServer mySasdasdafdfderver(80);
+WebServer server(80);
 somethingHandler whenConnectionFinished;
 bool connectedToWifi = false;
 bool tringToConnect = false;
@@ -9,12 +9,50 @@ unsigned long wifiStartedConnect = 0;
 void initWifi()
 {
     WiFi.mode(WIFI_STA);
-    connectWifi();
+
+    initWebServer();
+    
+    CMDprint("Conectando à rede \"");
+    CMDprint(d.wifi.ssid);
+    CMDprintln("\"...");
+    connectWifi([](bool success) {
+        if(success){
+            CMDprintln("Conectado");
+            showIp();
+        }
+        else CMDprintln("Falha ao conectar à rede");
+    });
+}
+
+void initWebServer()
+{
+  if (MDNS.begin("esp32")) NBprintln("MDNS responder started");
+  else NBprintln("MDNS failed to start");
+
+  
+  server.on("/", []() {
+    server.send(200, "text/plain", "root");
+  });
+  server.on("/favicon.ico", []() {
+    server.send(200, "text/plain", "hmm favicon");
+  });
+
+  server.on("/inline", []() {
+    server.send(200, "text/plain", "this works as well");
+  });
+
+  server.onNotFound([]() {
+    server.send(200, "text/plain", "not found");
+  });
+
+  server.begin();
+  NBprintln("HTTP server started");
 }
 
 unsigned long lastVerify = 0;
 void handleWifi()
 {
+    server.handleClient();
     // handdle wifi status changes
     if(millis() - lastVerify > checkWifiStatusTime)
     {
@@ -68,11 +106,10 @@ void connectWifi()
 
 void connectWifi(somethingHandler wCF)
 {
+    WiFi.begin(d.wifi.ssid, d.wifi.password);
     whenConnectionFinished = wCF;
     wifiStartedConnect = millis();
     tringToConnect = true;
-    Serial.println("millis: "+String(millis()));
-    Serial.println("status connc: "+String(WiFi.begin(d.wifi.ssid, d.wifi.password)));
 }
 
 void disconnectWifi()
@@ -82,84 +119,93 @@ void disconnectWifi()
 
 void showIp()
 {
-    Serial.print("IP adress: ");
-    Serial.println(WiFi.localIP());
+    RPprint("IP adress: ");
+    RPprintln((String)WiFi.localIP().toString());
 }
 
 void exeWifiCommand(String cmd)
 {
     String args;
-    getCmd(cmd, &cmd, &args);
+    splitCmdArgs(cmd, &cmd, &args);
 
     if (cmd == "ssid")
     {
-        getCmd(args, &cmd, &args);
+        splitCmdArgs(args, &cmd, &args);
         if(cmd == "definir")
         {
-            if(setWifiSsid(args)) Serial.println("definido");
-            else Serial.println("Erro, nome da rede vazio ou muito longo");
+            if(setWifiSsid(args)) CMDprintln("definido");
+            else CMDprintln("Erro, nome da rede vazio ou muito longo");
         }
         else if(cmd == "")
         {
-            Serial.print("ssid: \"");
-            Serial.print(d.wifi.ssid);
-            Serial.println("\"");
+            CMDprint("ssid: \"");
+            CMDprint(d.wifi.ssid);
+            CMDprintln("\"");
         }
         else
         {
-            Serial.print("ação \"");
-            Serial.print(cmd);
-            Serial.println("\" não existe");
+            CMDprint("ação \"");
+            CMDprint(cmd);
+            CMDprintln("\" não existe");
         }
     }
     else if (cmd == "senha")
     {
-        getCmd(args, &cmd, &args);
+        splitCmdArgs(args, &cmd, &args);
         if(cmd == "definir")
         {
-            if(setWifiPassword(args)) Serial.println("definido");
-            else Serial.println("Erro, senha muito longa");
+            if(setWifiPassword(args)) CMDprintln("definido");
+            else CMDprintln("Erro, senha muito longa");
         }
         else if(cmd == "")
         {
-            Serial.print("senha: \"");
-            Serial.print(d.wifi.password);
-            Serial.println("\"");
+            CMDprint("senha: \"");
+            CMDprint(d.wifi.password);
+            CMDprintln("\"");
         }
         else
         {
-            Serial.print("ação \"");
-            Serial.print(cmd);
-            Serial.println("\" não existe");
+            CMDprint("ação \"");
+            CMDprint(cmd);
+            CMDprintln("\" não existe");
         }
     }
     else if (cmd == "conectar")
     {
-        Serial.print("Conectando à rede ");
-        Serial.print(d.wifi.ssid);
-        Serial.println("...");
+        CMDprint("Conectando à rede \"");
+        CMDprint(d.wifi.ssid);
+        CMDprintln("\"...");
         connectWifi([](bool success) {
             if(success){
-                Serial.println("Conectado");
+                CMDprintln("Conectado");
                 showIp();
             }
-            else Serial.println("Falha ao conectar à rede");
+            else CMDprintln("Falha ao conectar à rede");
         });
     }
     else if (cmd == "desconectar")
     {
         disconnectWifi();
-        Serial.println("Desconectado");
+        CMDprintln("Desconectado");
     }
     else if (cmd == "status")
     {
-        Serial.println("conectado: "+String(connectedToWifi));
+        CMDprintln("conectado: "+String(connectedToWifi));
         showIp();
+    }
+    else if (cmd == "web")
+    {
+        initWebServer();
+    }
+    else if (cmd == "s")
+    {
+        RPprint("wifi status: ");
+        RPprintln(WiFi.status());
     }
     else
     {
-        Serial.print("opção \"");
-        Serial.print(cmd);
-        Serial.println("\" não existe");
+        CMDprint("opção \"");
+        CMDprint(cmd);
+        CMDprintln("\" não existe");
     }
 }

@@ -15,11 +15,14 @@
 typedef std::function<void(bool)> somethingHandler;
 
 void initWifi();
+void initWebServer();
 void handleWifi();
 bool setWifiSsid(String ssid);
 bool setWifiPassword(String password);
+void connectWifi();
 void connectWifi(somethingHandler connectionFinishedHandler);
 void disconnectWifi();
+void showIp();
 void exeWifiCommand(String args);
 
 #endif

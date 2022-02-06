@@ -2,11 +2,11 @@
 
 void restartSystem()
 {
-    Serial.println("Restart ESP...");
+    NBprintln("Restart ESP...");
     ESP.restart();
 }
 
-void getCmd(String cmdArgs, String *cmd, String *args)
+void splitCmdArgs(String cmdArgs, String *cmd, String *args)
 {
     int idxOfThing = cmdArgs.indexOf(" ");
     if(idxOfThing == -1)

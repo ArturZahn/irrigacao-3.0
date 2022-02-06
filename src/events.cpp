@@ -2,7 +2,7 @@
 
 void checkEvents(int *now)
 {
-    // Serial.println("checking events...");
+    // NBprintln("checking events...");
 
     byte programationNumToStart = findProgramationToStartNow(now);
     if(programationNumToStart != programationEmpty)
@@ -43,23 +43,23 @@ void eventClass::start(Programation programationToStart)
     eventClass::activeProgamation = programationToStart;
     eventClass::setupNewEvent();
 
-    // Serial.print("sections order: ");
-    // Serial.print(eventClass::activeProgamation.getSectionOrder(0));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getSectionOrder(1));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getSectionOrder(2));
-    // Serial.print("|");
-    // Serial.println(eventClass::activeProgamation.getSectionOrder(3));
+    // NBprint("sections order: ");
+    // NBprint(eventClass::activeProgamation.getSectionOrder(0));
+    // NBprint("|");
+    // NBprint(eventClass::activeProgamation.getSectionOrder(1));
+    // NBprint("|");
+    // NBprint(eventClass::activeProgamation.getSectionOrder(2));
+    // NBprint("|");
+    // NBprintln(eventClass::activeProgamation.getSectionOrder(3));
     
-    // Serial.print("durations: ");
-    // Serial.print(eventClass::activeProgamation.getDuration(0));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getDuration(1));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getDuration(2));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getDuration(3));
+    // NBprint("durations: ");
+    // NBprint(eventClass::activeProgamation.getDuration(0));
+    // NBprint("|");
+    // NBprint(eventClass::activeProgamation.getDuration(1));
+    // NBprint("|");
+    // NBprint(eventClass::activeProgamation.getDuration(2));
+    // NBprint("|");
+    // NBprint(eventClass::activeProgamation.getDuration(3));
 
 
 }
@@ -91,15 +91,15 @@ void eventClass::handle()
 
 void eventClass::fireStartOfCurrentStage()
 {
-    Serial.print("Start of stage ");
-    Serial.println(eventClass::stagesCurrentStage);
+    NBprint("Start of stage ");
+    NBprintln(eventClass::stagesCurrentStage);
     eventClass::activeProgamation.fireStartOfStage(eventClass::stagesCurrentStage);
 }
 
 void eventClass::fireEndOfCurrentStage()
 {
-    Serial.print("End of stage ");
-    Serial.println(eventClass::stagesCurrentStage);
+    NBprint("End of stage ");
+    NBprintln(eventClass::stagesCurrentStage);
     eventClass::activeProgamation.fireEndOfStage(eventClass::stagesCurrentStage);
 }
 

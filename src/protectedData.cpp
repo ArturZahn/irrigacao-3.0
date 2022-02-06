@@ -6,8 +6,8 @@ protectedData d;
 
 void initializeEEPROM()
 {
-    if(!EEPROM.begin(EEPROM_SIZE)) Serial.println("failed to initialise EEPROM");
-    else Serial.println("EEPROM initialized");
+    if(!EEPROM.begin(EEPROM_SIZE)) NBprintln("failed to initialise EEPROM");
+    else NBprintln("EEPROM initialized");
 }
 
 void storeEEPROMData()

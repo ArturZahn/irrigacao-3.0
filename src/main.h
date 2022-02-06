@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include <Arduino.h>
+#include "handlePrint.h"
 #include "watchTime.h"
 #include "programations.h"
 #include "serialControl.h"

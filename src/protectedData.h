@@ -6,6 +6,7 @@
 #include "EEPROM.h"
 #include "programationRawDataStructure.h"
 #include "wifiDataDef.h"
+#include "handlePrint.h"
 
 
 #define numOfProgramations 5
