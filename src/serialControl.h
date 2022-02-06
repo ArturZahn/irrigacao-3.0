@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "alterProgramation.h"
 #include "watchTime.h"
+#include "wifiHandler.h"
 
 #define sizeOfCommand 256
 

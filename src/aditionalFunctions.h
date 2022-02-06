@@ -5,5 +5,6 @@
 // #include "Esp.h"
 
 void restartSystem();
+void getCmd(String cmdArgs, String *cmd, String *args);
 
 #endif

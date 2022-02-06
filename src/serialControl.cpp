@@ -89,6 +89,8 @@ void runCommand()
 
     else if(command == F("reiniciar")) restartSystem();
 
+    else if(command == F("wifi")) exeWifiCommand(args);
+
     // else if(command == F("mostrarErros")) Serial.println("showErrors();"); //showErrors();
     
     // else if(command == F("limparErros")) Serial.println("clearErrors();"); //clearErrors();

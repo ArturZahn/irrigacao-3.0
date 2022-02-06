@@ -5,13 +5,17 @@
 #include <Arduino.h>
 #include "EEPROM.h"
 #include "programationRawDataStructure.h"
+#include "wifiDataDef.h"
+
 
 #define numOfProgramations 5
+
 
 struct protectedData
 {
     programationRawData programationsRawData[numOfProgramations];
     bool areProgramationsPaused;
+    wifiData wifi;
 };
 
 extern protectedData d;

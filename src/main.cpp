@@ -1,9 +1,4 @@
-#include <Arduino.h>
-#include "watchTime.h"
-#include "programations.h"
-#include "serialControl.h"
-#include "timeFuncs.h"
-#include "rtc.h"
+#include "main.h"
 
 void setup()
 {
@@ -14,6 +9,7 @@ void setup()
     initializeEEPROM();
     readEEPROMData();
     initializeProgramations();
+    initWifi();
 
 
     // for(byte prog = 0; prog < numOfProgramations; prog++)
@@ -45,6 +41,7 @@ void loop()
     handleWatchTime();
     handleActiveEvent();
     handleSerialControl();
+    handleWifi();
 }
 
 

@@ -6,20 +6,22 @@ unsigned long getTime()
     // temporaryVar_time += 60;
     // return temporaryVar_time;
 
-    byte i = 0;
-    while(!checkIfRTCIsWorking())
-    {
-        i++;
-        initRTC();
+    // byte i = 0;
+    // while(!checkIfRTCIsWorking())
+    // {
+    //     i++;
+    //     initRTC();
 
-        if(i >= numbOfRetriesConnecRTC) 
-        {
-            Serial.println("failed reading RTC time");
-            restartSystem();
-        }
-    }
+    //     if(i >= numbOfRetriesConnecRTC) 
+    //     {
+    //         Serial.println("failed reading RTC time");
+    //         restartSystem();
+    //     }
+    // }
 
-    return readTimeFromRTC();
+    // return readTimeFromRTC();
+
+    return 50400; // 14:00:00
 }
 
 unsigned int getDayTime()
