@@ -4,16 +4,18 @@ WebServer server(80);
 
 void initWebServer()
 {
-  if (MDNS.begin("esp32")) NBprintln("MDNS responder started");
-  else NBprintln("MDNS failed to start");
+    if (MDNS.begin("esp32")) NBprintln("MDNS responder started");
+    else NBprintln("MDNS failed to start");
 
-  
-  server.onNotFound(handleNotFound);
-  server.on("/", handleRoot);
+    server.enableCORS(true);
+    // server.enableCrossOrigin(true);
+    
+    server.onNotFound(handleNotFound);
+    server.on("/", handleRoot);
 
 
-  server.begin();
-  NBprintln("HTTP server started");
+    server.begin();
+    NBprintln("HTTP server started");
 }
 
 void handleWebServer()
@@ -23,11 +25,13 @@ void handleWebServer()
 
 void handleNotFound() {
 
-    if(server.uri().indexOf("/cli/") == 0);
+    if(server.uri().indexOf("/cli/") == 0)
     {
+        NBprintln("entrou");
         handleCli(urlDecode(server.uri().substring(5)));
         return;
     }
+    NBprintln("nao entrou");
 
     String message = "File Not Found\n\n";
     message += "URI: ";
