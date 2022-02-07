@@ -7,10 +7,6 @@
 #include "watchTime.h"
 #include "wifiHandler.h"
 
-#define CLI_SOURCE_OTHER 255
-#define CLI_SOURCE_SERIAL 1
-#define CLI_SOURCE_WIFI 2
-
-void cliRunCommand(String cmd, byte cmdSource);
+void cliRunCommand(String cmd);
 
 #endif

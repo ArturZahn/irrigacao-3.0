@@ -1,9 +1,7 @@
 #include "cli.h"
 
-void cliRunCommand(String cmd, byte cmdSource)
+void cliRunCommand(String cmd)
 {
-    if(cmdSource == CLI_SOURCE_WIFI) startLogBuffering();
-
     String args;
     splitCmdArgs(cmd, &cmd, &args);
 
@@ -15,15 +13,15 @@ void cliRunCommand(String cmd, byte cmdSource)
     
     // else if(cmd == F("ajustarHora")) CMDprintln("ajustTime(args);"); //ajustTime(args);
     
-    else if(cmd == F("pausarProgramacoes")) { pauseProgramations(); CMDprint("Programações pausadas"); }
+    else if(cmd == F("pausarProgramacoes")) {setCmdState(true); pauseProgramations(); CMDprint("Programações pausadas");  }
     
-    else if(cmd == F("retomarProgramacoes")) { resumeProgramations(); CMDprint("Programações retomadas"); }
+    else if(cmd == F("retomarProgramacoes")) { setCmdState(true); resumeProgramations(); CMDprint("Programações retomadas"); }
     
     // else if(cmd == F("mostrarSetorManual")) CMDprintln("showManualSetor();"); //showManualSetor();
     
     // else if(cmd == F("alterarSetorManual")) CMDprintln("alterManualSetor(args);"); //alterManualSetor(args);
     
-    else if(cmd == F("dispararProgramacao")) startEvent(args.toInt());
+    else if(cmd == F("dispararProgramacao")) { setCmdState(startEvent(args.toInt()));} //@#@#@
 
     else if(cmd == F("reiniciar")) restartSystem();
 

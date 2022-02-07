@@ -6,7 +6,8 @@
 #define logBufferSize 512
 
 void initPrint();
-
+void setCmdState(bool s);
+bool getCmdState();
 
 void bufferPrint(String s);
 

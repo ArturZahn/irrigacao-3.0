@@ -1,6 +1,5 @@
 #include "wifiHandler.h"
 
-WebServer server(80);
 somethingHandler whenConnectionFinished;
 bool connectedToWifi = false;
 bool tringToConnect = false;
@@ -24,35 +23,11 @@ void initWifi()
     });
 }
 
-void initWebServer()
-{
-  if (MDNS.begin("esp32")) NBprintln("MDNS responder started");
-  else NBprintln("MDNS failed to start");
-
-  
-  server.on("/", []() {
-    server.send(200, "text/plain", "root");
-  });
-  server.on("/favicon.ico", []() {
-    server.send(200, "text/plain", "hmm favicon");
-  });
-
-  server.on("/inline", []() {
-    server.send(200, "text/plain", "this works as well");
-  });
-
-  server.onNotFound([]() {
-    server.send(200, "text/plain", "not found");
-  });
-
-  server.begin();
-  NBprintln("HTTP server started");
-}
-
 unsigned long lastVerify = 0;
 void handleWifi()
 {
-    server.handleClient();
+    handleWebServer();
+
     // handdle wifi status changes
     if(millis() - lastVerify > checkWifiStatusTime)
     {
@@ -119,8 +94,32 @@ void disconnectWifi()
 
 void showIp()
 {
-    RPprint("IP adress: ");
+    RPprint("Enderço IP: ");
     RPprintln((String)WiFi.localIP().toString());
+}
+
+void listNetworks() {
+  // scan for nearby networks:
+  int numSsid = WiFi.scanNetworks();
+  if (numSsid == -1) {
+    CMDprintln("Não há nenhuma rede disponível");
+    return;
+  }
+
+  // print the list of networks seen:
+  CMDprint("Redes disponíveis (");
+  CMDprint(numSsid);
+  CMDprintln("):");
+
+  // print the network number and name for each network found:
+  for (int thisNet = 0; thisNet < numSsid; thisNet++) {
+    CMDprint(thisNet+1);
+    CMDprint(") \"");
+    CMDprint(WiFi.SSID(thisNet));
+    CMDprint("\" ");
+    CMDprint(WiFi.RSSI(thisNet));
+    CMDprintln(" dBm");
+  }
 }
 
 void exeWifiCommand(String cmd)
@@ -133,11 +132,16 @@ void exeWifiCommand(String cmd)
         splitCmdArgs(args, &cmd, &args);
         if(cmd == "definir")
         {
-            if(setWifiSsid(args)) CMDprintln("definido");
+            if(setWifiSsid(args))
+            {
+                CMDprintln("definido");
+                setCmdState(true);
+            }
             else CMDprintln("Erro, nome da rede vazio ou muito longo");
         }
         else if(cmd == "")
         {
+            setCmdState(true);
             CMDprint("ssid: \"");
             CMDprint(d.wifi.ssid);
             CMDprintln("\"");
@@ -154,11 +158,16 @@ void exeWifiCommand(String cmd)
         splitCmdArgs(args, &cmd, &args);
         if(cmd == "definir")
         {
-            if(setWifiPassword(args)) CMDprintln("definido");
+            if(setWifiPassword(args))
+            {
+                setCmdState(true);
+                CMDprintln("definido");
+            }
             else CMDprintln("Erro, senha muito longa");
         }
         else if(cmd == "")
         {
+            setCmdState(true);
             CMDprint("senha: \"");
             CMDprint(d.wifi.password);
             CMDprintln("\"");
@@ -172,6 +181,7 @@ void exeWifiCommand(String cmd)
     }
     else if (cmd == "conectar")
     {
+        setCmdState(true);
         CMDprint("Conectando à rede \"");
         CMDprint(d.wifi.ssid);
         CMDprintln("\"...");
@@ -185,22 +195,31 @@ void exeWifiCommand(String cmd)
     }
     else if (cmd == "desconectar")
     {
+        setCmdState(true);
         disconnectWifi();
         CMDprintln("Desconectado");
     }
     else if (cmd == "status")
     {
-        CMDprintln("conectado: "+String(connectedToWifi));
+        setCmdState(true);
+        if(WiFi.status() != WL_CONNECTED)
+        {
+            CMDprintln("Desconectado");
+            return;
+        }
+        
+        CMDprint("Conectado em \"");
+        CMDprint(WiFi.SSID());
+        CMDprint("\" (");
+        CMDprint(WiFi.RSSI());
+        CMDprintln(" dBm)");
         showIp();
     }
-    else if (cmd == "web")
+    // wifi status
+    else if (cmd == "listar")
     {
-        initWebServer();
-    }
-    else if (cmd == "s")
-    {
-        RPprint("wifi status: ");
-        RPprintln(WiFi.status());
+        setCmdState(true);
+        listNetworks();
     }
     else
     {

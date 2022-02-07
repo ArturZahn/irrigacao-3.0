@@ -40,7 +40,7 @@ class eventClass
 };
 
 void handleActiveEvent();
-void startEvent(byte programationToStart);
+bool startEvent(byte programationToStart);
 void stopEvent();
 
 #endif

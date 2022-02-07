@@ -2,6 +2,7 @@
 
 void showProgramations()
 {
+    setCmdState(true);
     CMDprintln("status:");
     for(byte prog = 0; prog < numOfProgramations; prog++)
     {
@@ -137,9 +138,12 @@ void alterProgramation(String &args)
         }
         
         tempProg.setTrigger(count, (thisArg.substring(0, thingIdx).toInt()*60)+thisArg.substring(thingIdx+1).toInt());
+
         count++;
         thingIdx = argsTemp.indexOf(F(","));
     }
+
+    for(byte i = count; i < numOfTriggers; i++) tempProg.setTrigger(i, triggerEmpty);
     
     args.replace(F("}{"), F(";"));
     args.replace(F("}"), F(";"));
@@ -184,6 +188,9 @@ void alterProgramation(String &args)
 
         return;
     }
+
+    setCmdState(true);
+    
     CMDprint(F("Programação alterada: "));
     CMDprint(String(byte(programationIdx)));
     CMDprint(F(" -> "));

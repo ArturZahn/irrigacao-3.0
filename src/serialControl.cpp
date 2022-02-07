@@ -59,5 +59,5 @@ void clearCommand()
 
 void runSerialCommand()
 {
-    cliRunCommand(fullCommand, CLI_SOURCE_SERIAL);
+    cliRunCommand(fullCommand);
 }

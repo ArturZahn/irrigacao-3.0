@@ -4,10 +4,20 @@ char logBuffer[logBufferSize+1];
 unsigned int logBufferIndex = 0;
 // bool bufferOverflowed = false;
 bool LogBufferingState = false;
+bool cmdState = false;
 
 void initPrint()
 {
     Serial.begin(115200);
+}
+
+void setCmdState(bool s)
+{
+    cmdState = s;
+}
+bool getCmdState()
+{
+    return cmdState;
 }
 
 void startLogBuffering()
@@ -44,6 +54,8 @@ void bufferPrint(String s)
 
 char* getLogBuffer()
 {
+    // if(cmdState) return strcat("OK\n", logBuffer);
+    // else return strcat("Erro\n", logBuffer);
     return logBuffer;
 }
 
@@ -51,6 +63,7 @@ void clearLogBuffer()
 {
     memset(logBuffer, 0, sizeof(logBuffer));
     logBufferIndex = 0;
+    cmdState = false;
     // bufferOverflowed = false;
 }
 

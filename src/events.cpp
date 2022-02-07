@@ -134,9 +134,12 @@ void eventClass::stopEvent()
 
 eventClass activeEvent;
 
-void startEvent(byte programationNumToStart)
+bool startEvent(byte programationNumToStart)
 {
+    if(programationNumToStart == programationEmpty || programationNumToStart >= numOfProgramations) return false;
+
     activeEvent.start(getProgramation(programationNumToStart));
+    return true;
 }
 
 void handleActiveEvent()
