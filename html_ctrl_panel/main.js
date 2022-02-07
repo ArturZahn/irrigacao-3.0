@@ -1,8 +1,11 @@
+// console.log("oi")
+
 var espURL;
 
 function startApp(_espURL)
 {
     espURL = _espURL;
+
     var content = $(
         `<div class="pageContainer">
             <div class="page pageMain" style="display: none;">
