@@ -3,19 +3,12 @@
 void showProgramations()
 {
     setCmdState(true);
-    CMDprintln("status:");
-    for(byte prog = 0; prog < numOfProgramations; prog++)
-    {
-        CMDprint(getProgramation(prog).getStatus());
-        CMDprint(" ");
-    }
-    CMDprintln();
     
     CMDprintln(F("Programações:"));
     for(int i = 0; i < numOfProgramations; i++)
     {
         CMDprint(i);
-        CMDprint(F(" -> "));
+        CMDprint(F(" > "));
         CMDprint(getProgramation(i).getStatus()?F("L"):F("D"));
         for(int j = 0; j < numOfStages; j++)
         {
@@ -45,7 +38,7 @@ void showProgramations()
     CMDprint(F("\n"));
 }
 
-void alterProgramation(String &args)
+void handleAlterProgramation(String &args)
 {
     programationRawData tempProgRawData;
     Programation tempProg;
@@ -55,16 +48,16 @@ void alterProgramation(String &args)
     byte programationIdx;
     
     //this ↓ variable will be used for storing the index of many things
-    int thingIdx = args.indexOf(F("->"));
+    int thingIdx = args.indexOf(F(">"));
     
     if(thingIdx == -1)
     {
-        CMDprintln(F("Erro, seta '->' não encontrada"));
+        CMDprintln(F("Erro, seta '>' não encontrada"));
         return;
     }
     
     programationIdx = args.substring(0, thingIdx).toInt();
-    args = args.substring(thingIdx+2);
+    args = args.substring(thingIdx+1);
     
     if(programationIdx >= numOfProgramations)
     {
@@ -80,6 +73,7 @@ void alterProgramation(String &args)
         CMDprintln(F("Erro, primeira chave '{' não encontrada"));
         return;
     }
+    
     String argsTemp = args.substring(0, thingIdx);
     args = args.substring(thingIdx);
 
@@ -95,7 +89,7 @@ void alterProgramation(String &args)
             CMDprint(String(argsTemp));
             CMDprint(F("' não é um estado válido"));
         }
-        CMDprintln(F(" (esperado 'L' ligado ou 'D' desligado"));
+        CMDprintln(F(" (esperado 'L' ativado ou 'D' desativado"));
         return;
     }
 
@@ -190,10 +184,11 @@ void alterProgramation(String &args)
     }
 
     setCmdState(true);
+    setNeedToUpdate();
     
     CMDprint(F("Programação alterada: "));
     CMDprint(String(byte(programationIdx)));
-    CMDprint(F(" -> "));
+    CMDprint(F(" > "));
 
 
     CMDprint(tempProg.getStatus()?F("L"):F("D"));

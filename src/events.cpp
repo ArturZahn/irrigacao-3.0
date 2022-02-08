@@ -34,7 +34,7 @@ eventClass::eventClass()
 
 void eventClass::start(Programation programationToStart)
 {
-
+    setAutomaticMode(true);
     if(eventClass::isThereEventRunning)
     {
         eventClass::stopEvent();
@@ -43,25 +43,18 @@ void eventClass::start(Programation programationToStart)
     eventClass::activeProgamation = programationToStart;
     eventClass::setupNewEvent();
 
-    // NBprint("sections order: ");
-    // NBprint(eventClass::activeProgamation.getSectionOrder(0));
-    // NBprint("|");
-    // NBprint(eventClass::activeProgamation.getSectionOrder(1));
-    // NBprint("|");
-    // NBprint(eventClass::activeProgamation.getSectionOrder(2));
-    // NBprint("|");
-    // NBprintln(eventClass::activeProgamation.getSectionOrder(3));
+    setNeedToUpdate();
+}
+
+bool eventClass::start(byte programationNumToStart)
+{
+    if(programationNumToStart == programationEmpty || programationNumToStart >= numOfProgramations) return false;
+
+    eventClass::start(getProgramation(programationNumToStart));
+    eventClass::activeProgamationNum = programationNumToStart;
     
-    // NBprint("durations: ");
-    // NBprint(eventClass::activeProgamation.getDuration(0));
-    // NBprint("|");
-    // NBprint(eventClass::activeProgamation.getDuration(1));
-    // NBprint("|");
-    // NBprint(eventClass::activeProgamation.getDuration(2));
-    // NBprint("|");
-    // NBprint(eventClass::activeProgamation.getDuration(3));
-
-
+    
+    return true;
 }
 
 void eventClass::setupNewEvent()
@@ -127,19 +120,26 @@ void eventClass::setupCurrentStage()
 
 void eventClass::stopEvent()
 {
+    setAutomaticMode(true);
     eventClass::isThereEventRunning = false;
     eventClass::stagesCurrentStage = 0;
     eventClass::durationOfCurrentStage = 0;
+    eventClass::activeProgamationNum = programationEmpty;
+    setNeedToUpdate();
+}
+
+byte eventClass::getActiveProgramation()
+{
+    if(!eventClass::isThereEventRunning) return programationEmpty;
+
+    return eventClass::activeProgamationNum;
 }
 
 eventClass activeEvent;
 
 bool startEvent(byte programationNumToStart)
 {
-    if(programationNumToStart == programationEmpty || programationNumToStart >= numOfProgramations) return false;
-
-    activeEvent.start(getProgramation(programationNumToStart));
-    return true;
+    return activeEvent.start(programationNumToStart);
 }
 
 void handleActiveEvent()
@@ -150,4 +150,9 @@ void handleActiveEvent()
 void stopEvent()
 {
     activeEvent.stopEvent();
+}
+
+byte getActiveProgramation()
+{
+    return activeEvent.getActiveProgramation();
 }

@@ -30,16 +30,19 @@ void handleWatchTime()
     }
 }
 
-void pauseProgramations()
+void pauseAutomaticProgramations()
 {
+    setAutomaticMode(true);
     d.areProgramationsPaused = true;
-    stopEvent();
+    setNeedToUpdate();
 
     storeEEPROMData();
 }
-void resumeProgramations()
+void resumeAutomaticProgramations()
 {
+    setAutomaticMode(true);
     d.areProgramationsPaused = false;
+    setNeedToUpdate();
     
     storeEEPROMData();
 }

@@ -29,9 +29,9 @@ var LOADER_API_tagsToLoad =
                 content: "Irrigação 3.0"
             }
         ],
-        onFinish: ()=>{
-            console.log("Finished meta tags");
-        }
+        // onFinish: ()=>{
+        //     console.log("Finished meta tags");
+        // }
     },
     {
         whereToAppend: document.head,
@@ -53,13 +53,14 @@ var LOADER_API_tagsToLoad =
             {
                 tagType: "script",
                 props: {
-                    src: "main.js",
+                    // src: "http://192.168.0.101:5500/html_ctrl_panel/main.js",
+                    src: "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/main.js",
                 },
             }
         ],
-        onFinish: ()=>{
-            console.log("Finished scripts");
-        }
+        // onFinish: ()=>{
+        //     console.log("Finished scripts");
+        // }
     },
     {
         whereToAppend: document.head,
@@ -76,22 +77,24 @@ var LOADER_API_tagsToLoad =
             {
                 tagType: "link",
                 props: {
-                    href: "main.css",
+                    // href: "http://192.168.0.101:5500/html_ctrl_panel/main.css",
+                    href: "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/main.css",
                     rel: "stylesheet",
                 },
             },
         ],
-        onFinish: ()=>{
-            console.log("Finished styles");
-        }
+        // onFinish: ()=>{
+        //     console.log("Finished styles");
+        // }
     },
 ]
 
 var LOADER_API_contentLoaded = ()=>{
-    console.log("Content loaded");
+    // console.log("Content loaded");
     startApp(espAddress);
 }
 
 var loadApiScript = document.createElement("script");
-loadApiScript.setAttribute("src", "loader.api.js");
+// loadApiScript.setAttribute("src", "http://192.168.0.101:5500/html_ctrl_panel/loader.api.js");
+loadApiScript.setAttribute("src", "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/loader.api.js");
 document.head.appendChild(loadApiScript);

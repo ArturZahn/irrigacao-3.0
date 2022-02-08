@@ -1,4 +1,4 @@
-#include "handleWebServer.h"
+#include "wifiControlPanel.h"
 
 WebServer server(80);
 
@@ -12,6 +12,7 @@ void initWebServer()
     
     server.onNotFound(handleNotFound);
     server.on("/", handleRoot);
+    server.on("/needToUpdate", handleNeedToUpdate);
 
 
     server.begin();
@@ -27,11 +28,9 @@ void handleNotFound() {
 
     if(server.uri().indexOf("/cli/") == 0)
     {
-        NBprintln("entrou");
         handleCli(urlDecode(server.uri().substring(5)));
         return;
     }
-    NBprintln("nao entrou");
 
     String message = "File Not Found\n\n";
     message += "URI: ";
@@ -48,9 +47,10 @@ void handleNotFound() {
 }
 
 void handleRoot() {
-  server.send(200, "text/plain", "root");
+  server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\"http://192.168.0.101:5500/html_ctrl_panel/loader.js\"></script></body></html>");
 }
 
+unsigned int updateNumber = 0;
 void handleCli(String fullCmd)
 {
     startLogBuffering();
@@ -62,3 +62,12 @@ void handleCli(String fullCmd)
     stopLogBuffering();
 }
 
+void setNeedToUpdate()
+{
+    updateNumber++;
+}
+
+void handleNeedToUpdate()
+{
+    server.send(200, "text/plain", (String) updateNumber);
+}

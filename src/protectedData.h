@@ -17,6 +17,7 @@ struct protectedData
     programationRawData programationsRawData[numOfProgramations];
     bool areProgramationsPaused;
     wifiData wifi;
+    byte defaultManualSection;
 };
 
 extern protectedData d;

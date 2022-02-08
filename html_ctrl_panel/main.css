@@ -87,6 +87,13 @@ input.chb:checked + label span.chb > span {
     margin-left: 1rem;
     background-color: var(--color1);
 }
+input.chb:not(:checked) + label .chb_ckd {
+    display: none;
+}
+input.chb:checked + label .chb_nckd {
+    display: none;
+}
+/* chb_ckd */
 .lineBetweenRows > .row:not(:first-child) {
     position: relative;
 }

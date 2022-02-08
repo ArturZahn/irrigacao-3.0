@@ -4,7 +4,7 @@
 #include <WiFi.h>
 #include "protectedData.h"
 #include "aditionalFunctions.h"
-#include "handleWebServer.h"
+#include "wifiControlPanel.h"
 
 #define wifiFailConnectTime 11000
 #define checkWifiStatusTime 100

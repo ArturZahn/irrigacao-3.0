@@ -1,5 +1,5 @@
-#ifndef HANDLEWEBSERVER_H
-#define HANDLEWEBSERVER_H
+#ifndef WIFICONTROL_H
+#define WIFICONTROL_H
 
 #include <WiFiClient.h>
 #include <WebServer.h>
@@ -13,5 +13,7 @@ void handleWebServer();
 void handleNotFound();
 void handleRoot();
 void handleCli(String fullCmd);
+void setNeedToUpdate();
+void handleNeedToUpdate();
 
 #endif

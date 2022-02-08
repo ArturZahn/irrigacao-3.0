@@ -9,6 +9,7 @@
 #include "timeFuncs.h"
 #include "rtc.h"
 #include "wifiHandler.h"
+#include "automaticMode.h"
 
 void setup();
 void loop();

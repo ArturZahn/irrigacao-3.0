@@ -2,9 +2,9 @@
 
 var espURL;
 
-function startApp(_espURL)
+function startApp(espIp)
 {
-    espURL = _espURL;
+    espURL = `http://${espIp}`;
 
     var content = $(
         `<div class="pageContainer">
@@ -52,6 +52,8 @@ function startApp(_espURL)
                             <input id="paax_prog" class="chb" type="checkbox">
                             <label for="paax_prog">
                                 <span class="chb"><span>&#8203;</span></span>
+                                <span class="chb_nckd text-danger">Desativado</span>
+                                <span class="chb_ckd text-success">Ativado</span>
                             </label>
                         </p>
                     </div>
@@ -122,6 +124,7 @@ function getInfo(functionToRunAfterFinishing)
 
             splitInLinesRemoveSpaces(data).forEach(line=>{
                 if(gotError) return;
+                if(line == "") return;
                 
                 var doubp = line.indexOf(":");
                 var val = parseInt(line.substr(doubp+1));
@@ -186,14 +189,18 @@ function getProgramations(functionToRunAfterFinishing)
     runCommand({
         cmd: "mostrarProgramacoes",
         success: (data)=>{
+
             var lines = splitInLinesRemoveSpaces(data);
 
+            
             var gotError = false;
-
+            
+            var progI = 0;
             lines.forEach((line, i) => {
                 if(gotError) return;
+                if(line == "Programações:" || line == "") return;
 
-                arrow = line.indexOf("→");
+                arrow = line.indexOf(">");
                 dash = line.indexOf("-");
 
                 var prog = {
@@ -209,15 +216,13 @@ function getProgramations(functionToRunAfterFinishing)
                     gotError = true;
                     return;
                 }
-
-                if(i != parseInt(line.substr(0, arrow)))
+                
+                if(progI != parseInt(line.substr(0, arrow)))
                 {
                     error(2);
                     gotError = true;
                     return;
                 }
-
-
 
                 var ordersDurations = line.substr(arrow+1, dash-arrow-1);
                 switch(ordersDurations.substr(0, 1))
@@ -239,23 +244,36 @@ function getProgramations(functionToRunAfterFinishing)
                 if(ordersDurations.substr(-1) != "}") {error(2); gotError=true;return;}
                 ordersDurations = ordersDurations.substr(1, ordersDurations.length-2).replaceAll("{", "");
 
-                ordersDurations.split("}").forEach((orderDuration, i)=>{
+                ordersDurations.split("}").forEach((orderDuration, progI)=>{
                     var virg = orderDuration.indexOf(",");
-                    prog.orders[i] = parseInt(orderDuration.substr(0, virg));
-                    prog.durations[i] = parseInt(orderDuration.substr(virg+1));
+                    prog.orders[progI] = parseInt(orderDuration.substr(0, virg));
+                    prog.durations[progI] = parseInt(orderDuration.substr(virg+1));
                 });
+                ////////////////////////////////////////////////////
 
-                var triggers = line.substr(dash+1).replaceAll("{", "");
-                if(triggers.substr(-1) != "}") {error(2); gotError=true;return;}
-                triggers = triggers.substr(0, triggers.length-1);
-
-                triggers.split("}").forEach((trigger, i)=>{
+                // console.log("triggers 1:", line.substr(dash+1))
+                
+                // var triggers = line.substr(dash+1).replaceAll("{", "");
+                // if(triggers.substr(-1) != "}") {error(2); gotError=true;return;}
+                // triggers = triggers.substr(0, triggers.length-1);
+                
+                // triggers.split("}").forEach((trigger, progI)=>{
+                //     prog.triggers[progI] = trigger.substr();
+                // });
+                // console.log("triggers 2:", triggers)
+                ////////////////////////////////////////////////////
+                var triggers = line.substr(dash+1).replaceAll("{", "").replaceAll("}", "");;
+                
+                triggers.split(",").forEach((trigger, i)=>{
                     prog.triggers[i] = trigger.substr();
                 });
-
+                ////////////////////////////////////////////////////
+                
                 for(j = prog.triggers.length; j < info.numOfTriggers; j++) prog.triggers[j] = "";
+                
+                programations[progI] = prog;
 
-                programations[i] = prog;
+                progI++;
             });
 
             if(!gotError && typeof functionToRunAfterFinishing == "function") functionToRunAfterFinishing();
@@ -305,6 +323,8 @@ function runCommand(obj, delay, giveError)
 {
     console.log(`running "${obj.cmd}"`);
 
+    obj.cmd = encodeURI(obj.cmd);
+
     if(typeof giveError == "undefined") giveError = false;
     if(typeof delay == "undefined") delay = 0;
 
@@ -322,23 +342,13 @@ function runCommand(obj, delay, giveError)
 
     setTimeout(()=>{
         $.ajax({
-            // url: `${espURL}/${cmd}.txt`,
-            url: `${espURL}/${cmd}.txt`+(giveError?"-":""),
+            url: `${giveError?"-":""}${espURL}/cli/${cmd}`,
             success: (data)=>{
                 data = data.replaceAll("\r\n", "\n");
-                var fsn = data.indexOf("\n");
-                if(fsn == -1) fsn = data.length;
-                var firstLine = data.substr(0, fsn);
-                if(firstLine != "OK")
-                {
-                    if(!giveError) error(4, `"${obj.cmd}":\n${data}`);
-                    if(typeof obj.error == "function") obj.error();
-                }
-                else if(typeof obj.success == "function") obj.success(data.substr(fsn+1));
+                if(typeof obj.success == "function") obj.success(data);
             },
             error: ()=>{
-                // error(3);
-                if(!giveError) error(3);
+                error(3);
                 if(typeof obj.error == "function") obj.error();
             },
             complete: ()=>{
@@ -350,9 +360,10 @@ function runCommand(obj, delay, giveError)
 
 
 
-
+var activePage = "";
 function loadPage(pageClass)
 {
+    activePage = pageClass;
     $(`.page:not(.${pageClass})`).hide();
     $(`.page.${pageClass}`).show();
 }
@@ -365,7 +376,7 @@ function loadMainPage()
             $("#programations").append(`
                 <div class="row" id="p${i}_main" onclick="loadProgramationPage(${i})">
                     <div class="col-1">${i}</div>
-                    <div class="col pstt ${info.areProgramationsPaused?"text-light-gray":(programation.enabled?"text-success":"text-danger")}">${programation.enabled?"Ligado":"Desligado"}</div>
+                    <div class="col pstt ${info.areProgramationsPaused?"text-light-gray":(programation.enabled?"text-success":"text-danger")}">${programation.enabled?"Ativado":"Desativado"}</div>
                     <div class="col-auto">setores: </div>
                     <div class="col">${orderStr(programation.orders)}</div>
                 </div>
@@ -406,7 +417,57 @@ function loadMainPage()
         $("#trigProgBtn").val(info.automaticProgramationRunning == info.programationEmpty?"Disparar programação":"Em andamento: "+info.automaticProgramationRunning);
 
         loadPage("pageMain");
+
+        setRefreshMainPage(true);
     });
+}
+
+var refreshMainPageTimer;
+var refreshMainPageTimerState;
+function setRefreshMainPage(stt)
+{
+    if(refreshMainPageTimerState == stt) return;
+
+    refreshMainPageTimerState = stt;
+
+    if(stt)
+    {
+        updateNumber = "";
+        checkIfNeedToUpdate();
+        refreshMainPageTimer = setInterval(()=>{
+            if(activePage != "pageMain")
+            {
+                setRefreshMainPage(false);
+                return;
+            }
+            checkIfNeedToUpdate();
+        }, 500);
+    }
+    else clearInterval(refreshMainPageTimer);
+}
+
+var checkingIfNeedToUpdate = false;
+var updateNumber = "";
+function checkIfNeedToUpdate()
+{
+    if(checkingIfNeedToUpdate) return;
+
+    // console.log("check")
+    checkingIfNeedToUpdate = true;
+    $.ajax({
+        url: `${espURL}/needToUpdate`,
+        success: (data)=>{
+            console.log(data);
+            if(data != updateNumber)
+            {
+                loadMainPage();
+                updateNumber = data;
+            }
+        },
+        complete: ()=>{
+            checkingIfNeedToUpdate = false;
+        }
+    })
 }
 
 function orderStr(orders)
@@ -503,14 +564,14 @@ function updtInput(input)
     if(inputStates[input].transition)
     {
         txt.css("opacity", "0.5");
-        if(inputStates[input].state) txt.text("Ligando...");
-        else txt.text("Desligando...");
+        if(inputStates[input].state) txt.text("Ativando...");
+        else txt.text("Desativando...");
     }
     else
     {
         txt.css("opacity", "1");
-        if(inputStates[input].state) txt.text("Ligado");
-        else txt.text(input == "pg_main"?"Desligado":"");
+        if(inputStates[input].state) txt.text("Ativado");
+        else txt.text(input == "pg_main"?"Desativado":"");
     }
 }
 
@@ -579,7 +640,7 @@ function handle_smax_main_change(sectionNum)
     var initialSmaxStates = [];
     var initial_pg_main_state;
     runCommand({
-        cmd: $("#"+ipt)[0].checked?"ligarSetor "+sectionNum:"desligarSetores",
+        cmd: $("#"+ipt)[0].checked?"ativarSetorManual "+sectionNum:"desativarSetorManual",
         before: ()=>{
             
             for(i = 0; i < info.numOfSections; i++) initialSmaxStates.push(getInputState(`sma${i}_main`));
@@ -647,7 +708,8 @@ function saveProgramationAlt()
     prog.triggers = prog.triggers.filter(value=>{return value!=""});
     for(j = prog.triggers.length; j < info.numOfTriggers; j++) prog.triggers[j] = "";
 
-    var cmd = `alterarProgramacao ${progNum} → `;
+    var cmd = `alterarProgramacao ${progNum} > `;
+    cmd += prog.enabled?"L":"D";
     prog.orders.forEach((order, i)=>{
         cmd += `{${order},${prog.durations[i]}}`;
     });
@@ -889,7 +951,7 @@ function setManualDefault(sectionNum)
     if(info.defaultManualSection == sectionNum) return;
 
     runCommand({
-        cmd: `alterarSetorManual ${sectionNum}`,
+        cmd: `alterarSetorManualPadrao ${sectionNum}`,
         before: ()=>{
             setManualDefaultTrast = true;
             $("#setManualDefault").val("Definindo...").css("opacity", "0.5");
