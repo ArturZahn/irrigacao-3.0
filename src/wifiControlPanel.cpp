@@ -47,7 +47,8 @@ void handleNotFound() {
 }
 
 void handleRoot() {
-  server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\"http://192.168.0.101:5500/html_ctrl_panel/loader.js\"></script></body></html>");
+//   server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\"http://192.168.0.101:5500/html_ctrl_panel/loader.js\"></script></body></html>");
+  server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\"https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/loader.js\"></script></body></html>");
 }
 
 unsigned int updateNumber = 0;
