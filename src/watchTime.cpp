@@ -15,8 +15,8 @@ void handleWatchTime()
             // new minute!
             // if(now%50==0)
             // {
-                Serial.print("time: ");
-                Serial.println(now);
+                NBprint("time: ");
+                NBprintln(now);
             // }
 
             // continue only if programations are not paused
@@ -30,22 +30,21 @@ void handleWatchTime()
     }
 }
 
-void pauseProgramations()
+void pauseAutomaticProgramations()
 {
+    setAutomaticMode(true);
     d.areProgramationsPaused = true;
-    stopEvent();
+    setNeedToUpdate();
 
     storeEEPROMData();
-
-    Serial.println("programations paused");
 }
-void resumeProgramations()
+void resumeAutomaticProgramations()
 {
+    setAutomaticMode(true);
     d.areProgramationsPaused = false;
+    setNeedToUpdate();
     
     storeEEPROMData();
-
-    Serial.println("programations resumed");
 }
 
 bool areProgramationsPaused()

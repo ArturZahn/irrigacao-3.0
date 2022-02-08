@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "programations.h"
+#include "automaticMode.h"
 
 void checkEvents(int *now);
 byte findProgramationToStartNow(int *now);
@@ -16,6 +17,7 @@ class eventClass
 
     bool isThereEventRunning;
     Programation activeProgamation;
+    byte activeProgamationNum;
 
     byte stagesCurrentStage;
     unsigned long durationOfCurrentStage;
@@ -32,15 +34,17 @@ class eventClass
 
     eventClass();
     void start(Programation programationToStart);
+    bool start(byte programationNumToStart);
     // bool isEventRunning();
     void handle();
     void stopEvent();
-
+    byte getActiveProgramation();
 
 };
 
 void handleActiveEvent();
-void startEvent(byte programationToStart);
+bool startEvent(byte programationToStart);
 void stopEvent();
+byte getActiveProgramation();
 
 #endif

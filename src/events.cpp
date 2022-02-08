@@ -2,7 +2,7 @@
 
 void checkEvents(int *now)
 {
-    // Serial.println("checking events...");
+    // NBprintln("checking events...");
 
     byte programationNumToStart = findProgramationToStartNow(now);
     if(programationNumToStart != programationEmpty)
@@ -34,7 +34,7 @@ eventClass::eventClass()
 
 void eventClass::start(Programation programationToStart)
 {
-
+    setAutomaticMode(true);
     if(eventClass::isThereEventRunning)
     {
         eventClass::stopEvent();
@@ -43,25 +43,18 @@ void eventClass::start(Programation programationToStart)
     eventClass::activeProgamation = programationToStart;
     eventClass::setupNewEvent();
 
-    // Serial.print("sections order: ");
-    // Serial.print(eventClass::activeProgamation.getSectionOrder(0));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getSectionOrder(1));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getSectionOrder(2));
-    // Serial.print("|");
-    // Serial.println(eventClass::activeProgamation.getSectionOrder(3));
+    setNeedToUpdate();
+}
+
+bool eventClass::start(byte programationNumToStart)
+{
+    if(programationNumToStart == programationEmpty || programationNumToStart >= numOfProgramations) return false;
+
+    eventClass::start(getProgramation(programationNumToStart));
+    eventClass::activeProgamationNum = programationNumToStart;
     
-    // Serial.print("durations: ");
-    // Serial.print(eventClass::activeProgamation.getDuration(0));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getDuration(1));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getDuration(2));
-    // Serial.print("|");
-    // Serial.print(eventClass::activeProgamation.getDuration(3));
-
-
+    
+    return true;
 }
 
 void eventClass::setupNewEvent()
@@ -91,15 +84,15 @@ void eventClass::handle()
 
 void eventClass::fireStartOfCurrentStage()
 {
-    Serial.print("Start of stage ");
-    Serial.println(eventClass::stagesCurrentStage);
+    NBprint("Start of stage ");
+    NBprintln(eventClass::stagesCurrentStage);
     eventClass::activeProgamation.fireStartOfStage(eventClass::stagesCurrentStage);
 }
 
 void eventClass::fireEndOfCurrentStage()
 {
-    Serial.print("End of stage ");
-    Serial.println(eventClass::stagesCurrentStage);
+    NBprint("End of stage ");
+    NBprintln(eventClass::stagesCurrentStage);
     eventClass::activeProgamation.fireEndOfStage(eventClass::stagesCurrentStage);
 }
 
@@ -127,16 +120,26 @@ void eventClass::setupCurrentStage()
 
 void eventClass::stopEvent()
 {
+    setAutomaticMode(true);
     eventClass::isThereEventRunning = false;
     eventClass::stagesCurrentStage = 0;
     eventClass::durationOfCurrentStage = 0;
+    eventClass::activeProgamationNum = programationEmpty;
+    setNeedToUpdate();
+}
+
+byte eventClass::getActiveProgramation()
+{
+    if(!eventClass::isThereEventRunning) return programationEmpty;
+
+    return eventClass::activeProgamationNum;
 }
 
 eventClass activeEvent;
 
-void startEvent(byte programationNumToStart)
+bool startEvent(byte programationNumToStart)
 {
-    activeEvent.start(getProgramation(programationNumToStart));
+    return activeEvent.start(programationNumToStart);
 }
 
 void handleActiveEvent()
@@ -147,4 +150,9 @@ void handleActiveEvent()
 void stopEvent()
 {
     activeEvent.stopEvent();
+}
+
+byte getActiveProgramation()
+{
+    return activeEvent.getActiveProgramation();
 }

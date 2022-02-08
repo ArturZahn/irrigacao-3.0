@@ -3,14 +3,16 @@
 
 #include "timeFuncs.h"
 #include "events.h"
+#include "automaticMode.h"
+#include "wifiControlPanel.h"
 
 // #define timeBetweenTimeChecks 1000
 #define timeBetweenTimeChecks 20
 
 void handleWatchTime();
 
-void pauseProgramations();
-void resumeProgramations();
+void pauseAutomaticProgramations();
+void resumeAutomaticProgramations();
 bool areProgramationsPaused();
 
 #endif

@@ -6,20 +6,22 @@ unsigned long getTime()
     // temporaryVar_time += 60;
     // return temporaryVar_time;
 
-    byte i = 0;
-    while(!checkIfRTCIsWorking())
-    {
-        i++;
-        initRTC();
+    // byte i = 0;
+    // while(!checkIfRTCIsWorking())
+    // {
+    //     i++;
+    //     initRTC();
 
-        if(i >= numbOfRetriesConnecRTC) 
-        {
-            Serial.println("failed reading RTC time");
-            restartSystem();
-        }
-    }
+    //     if(i >= numbOfRetriesConnecRTC) 
+    //     {
+    //         NBprintln("failed reading RTC time");
+    //         restartSystem();
+    //     }
+    // }
 
-    return readTimeFromRTC();
+    // return readTimeFromRTC();
+
+    return 50400; // 14:00:00
 }
 
 unsigned int getDayTime()
@@ -32,20 +34,20 @@ unsigned int getDayTime()
 
 // void initRTC()
 // {
-    // Serial.println("starting RTC...");
+    // NBprintln("starting RTC...");
 //   Wire.begin();  // inicia RTC
 
 //   DateTime t = rtc.now();
 
-//   Serial.print(t.hour());
-//   Serial.print(":");
-//   Serial.print(t.minute());
-//   Serial.print(":");
-//   Serial.print(t.second());
-//   Serial.print(" ");
-//   Serial.print(t.day());
-//   Serial.print(":");
-//   Serial.print(t.month());
-//   Serial.print(":");
-//   Serial.print(t.year());
+//   NBprint(t.hour());
+//   NBprint(":");
+//   NBprint(t.minute());
+//   NBprint(":");
+//   NBprint(t.second());
+//   NBprint(" ");
+//   NBprint(t.day());
+//   NBprint(":");
+//   NBprint(t.month());
+//   NBprint(":");
+//   NBprint(t.year());
 // }
