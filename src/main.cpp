@@ -3,8 +3,7 @@
 void setup()
 {
     #ifdef debugWifi
-    pinMode(ledRedPin, OUTPUT);
-    pinMode(ledYellowPin, OUTPUT);
+    initDebug();
     #endif
 
     initPrint();
@@ -16,27 +15,18 @@ void setup()
     initWifi();
 }
 
-
-#ifdef debugWifi
-unsigned long lastLedToggleTime = 0;
-#endif
 void loop()
 {
     handleWatchTime();
     handleActiveEvent();
     handleSerialControl();
 
-    #ifdef debugWifi
-    digitalWrite(ledRedPin, HIGH);
-    #endif
+    // setHandlingWifi(true);
     handleWifi();
-    #ifdef debugWifi
-    digitalWrite(ledRedPin, LOW);
+    // setHandlingWifi(false);
 
-    if(millis() - lastLedToggleTime > ledToggleTime)
-    {
-        lastLedToggleTime = millis();
-        digitalWrite(ledYellowPin, !digitalRead(ledYellowPin));
-    }
+
+    #ifdef debugWifi
+    finishedMainLoop();
     #endif
 }

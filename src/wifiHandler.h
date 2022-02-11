@@ -17,6 +17,7 @@ bool setWifiSsid(String ssid);
 bool setWifiPassword(String password);
 void connectWifi();
 void connectWifi(somethingHandler connectionFinishedHandler);
+bool isConnectedToWifi();
 void disconnectWifi();
 void showIp();
 void listNetworks();

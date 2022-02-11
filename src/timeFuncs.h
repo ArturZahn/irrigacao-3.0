@@ -16,7 +16,4 @@
 unsigned long getTime();
 unsigned int getDayTime();
 
-
-
-
 #endif
