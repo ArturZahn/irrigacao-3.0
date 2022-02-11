@@ -5,6 +5,9 @@
 #include "aditionalFunctions.h"
 #include "rtc.h"
 
+// #define disableRTC
+// #define jumpOneMinuteEveryGetTimeRequest
+
 #define timeEmpty 0x7FF
 #define timeMax 0x59F
 
@@ -12,8 +15,5 @@
 
 unsigned long getTime();
 unsigned int getDayTime();
-
-
-
 
 #endif

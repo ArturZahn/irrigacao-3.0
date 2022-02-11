@@ -10,6 +10,7 @@
 #include "rtc.h"
 #include "wifiHandler.h"
 #include "automaticMode.h"
+#include "debugging.h"
 
 void setup();
 void loop();

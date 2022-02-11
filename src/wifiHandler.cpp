@@ -87,6 +87,11 @@ void connectWifi(somethingHandler wCF)
     tringToConnect = true;
 }
 
+bool isConnectedToWifi()
+{
+    return connectedToWifi;
+}
+
 void disconnectWifi()
 {
     WiFi.disconnect();
