@@ -29,14 +29,15 @@ void handleWifi()
     handleWebServer();
 
     // handdle wifi status changes
-    if(millis() - lastVerify > checkWifiStatusTime)
+    unsigned long nowMillis = millis();
+    if(nowMillis - lastVerify > checkWifiStatusTime)
     {
         int wifiStatus = WiFi.status();
         connectedToWifi = wifiStatus == WL_CONNECTED;
 
         if(tringToConnect)
         {
-            if(connectedToWifi || millis() - wifiStartedConnect > wifiFailConnectTime)
+            if(connectedToWifi || nowMillis - wifiStartedConnect > wifiFailConnectTime)
             {
                 tringToConnect = false;
                 
@@ -47,8 +48,26 @@ void handleWifi()
                 }
             }
         }
+        else handleReconnectToWifi(nowMillis);
 
-        lastVerify = millis();
+        lastVerify = nowMillis;
+    }
+}
+
+unsigned long lastTimeConnected = 0;
+unsigned long lastTimeConnectionAttempt = 0;
+void handleReconnectToWifi(unsigned long nowMillis)
+{
+    if(connectedToWifi)
+    {
+        lastTimeConnected = nowMillis;
+        return;
+    }
+
+    if(nowMillis - lastTimeConnected > timeWithoutWifiBeforeTringToReconnect && nowMillis - lastTimeConnectionAttempt > timeBetweenReconnectAttempts)
+    {
+        lastTimeConnectionAttempt = nowMillis;
+        connectWifi();
     }
 }
 
