@@ -9,7 +9,7 @@ void setup()
     initPrint();
     initializeEEPROM();
     initSections();
-    initRTC();
+    initTime();
     readEEPROMData();
     initializeProgramations();
     initWifi();

@@ -9,10 +9,14 @@
 #define wifiFailConnectTime 11000
 #define checkWifiStatusTime 100
 
+#define timeWithoutWifiBeforeTringToReconnect 60000
+#define timeBetweenReconnectAttempts 20000
+
 typedef std::function<void(bool)> somethingHandler;
 
 void initWifi();
 void handleWifi();
+void handleReconnectToWifi(unsigned long nowMillis);
 bool setWifiSsid(String ssid);
 bool setWifiPassword(String password);
 void connectWifi();

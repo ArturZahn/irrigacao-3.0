@@ -6,7 +6,6 @@ DateTime t;
 
 void initRTC()
 {
-
     Wire.begin();
 
 

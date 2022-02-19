@@ -13,6 +13,7 @@
 
 #define numbOfRetriesConnecRTC 5
 
+void initTime();
 unsigned long getTime();
 unsigned int getDayTime();
 

@@ -1,5 +1,14 @@
 #include "timeFuncs.h"
 
+void initTime()
+{
+    #ifdef disableRTC
+    NBprint("RTC está desabilitado!!");
+    #else
+    initRTC();
+    #endif
+}
+
 #ifdef disableRTC
     #ifdef jumpOneMinuteEveryGetTimeRequest
 unsigned long temporaryVar_time = 1577836800;
