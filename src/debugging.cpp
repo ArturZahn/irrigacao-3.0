@@ -4,6 +4,11 @@ void initDebug()
 {
     pinMode(ledRedPin, OUTPUT);
     pinMode(ledYellowPin, OUTPUT);
+
+    // blink red led
+    digitalWrite(ledRedPin, HIGH);
+    delay(1000);
+    digitalWrite(ledRedPin, LOW);
 }
 
 // void setHandlingWifi(bool s)
