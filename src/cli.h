@@ -7,6 +7,8 @@
 #include "watchTime.h"
 #include "wifiHandler.h"
 #include "manualSection.h"
+#include "timeFuncs.h"
+#include "wifiHandler.h"
 
 void cliRunCommand(String cmd);
 

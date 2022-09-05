@@ -2,16 +2,22 @@
 #define SECTIONS_H
 
 #include <Arduino.h>
+#include "protectedData.h"
+
+// uncomment the following line to test if it can turn all sections at the same time without restarting
+// #define enableAllSectionsWhenOneIsActivated
+// remove all comments with this ↓↓
+//#$# 
 
 #define numOfSections 4
 #define sectionEmpty 255
 
-#define commonPin 27
-#define pumpPin 14
-#define section0 32
-#define section1 33
-#define section2 25
-#define section3 26
+#define commonPin 32
+#define pumpPin 33
+#define section0 25
+#define section1 26
+#define section2 27
+#define section3 14
 
 void initSections();
 byte getSectionPin(byte sectionNum);

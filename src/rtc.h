@@ -10,8 +10,12 @@
 
 
 void initRTC();
+DateTime getDateTime();
 int readTimeFromRTC();
 bool checkIfRTCIsWorking();
+
+void setTime(byte second, byte minute, byte hour, byte date, byte month, int year);
+bool setTime(String datetime);
 
 
 

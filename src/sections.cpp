@@ -41,10 +41,10 @@ void digiWrite(byte pin, bool stt)
 {
     switch(pin)
     {
-        case commonPin:
-        case pumpPin:
         case section0:
         case section1:
+        case section2:
+        case section3:
             stt = !stt;
         break;
     }
@@ -57,9 +57,28 @@ void activateSection(byte sectionNum)
     deactivateAllSections();
     if(sectionNum >= numOfSections || sectionNum == sectionEmpty) return; // do not enable any section if sectionNum is invalid
     
-    digiWrite(commonPin, HIGH);
-    digiWrite(pumpPin, HIGH);
+    #ifdef enableAllSectionsWhenOneIsActivated
+    if(d.areProgramationsPaused)
+    {
+        digiWrite(getSectionPin(0), HIGH);
+        digiWrite(getSectionPin(1), HIGH);
+        digiWrite(getSectionPin(2), HIGH);
+        digiWrite(getSectionPin(3), HIGH);
+
+        digiWrite(getSectionPin(sectionNum), HIGH);
+        digiWrite(commonPin, HIGH);
+    }
+    else
+    {
+        digiWrite(getSectionPin(sectionNum), HIGH);
+        digiWrite(pumpPin, HIGH);
+        digiWrite(commonPin, HIGH);
+    }
+    #else
     digiWrite(getSectionPin(sectionNum), HIGH);
+    digiWrite(pumpPin, HIGH);
+    digiWrite(commonPin, HIGH);
+    #endif
 }
 
 void deactivateAllSections()

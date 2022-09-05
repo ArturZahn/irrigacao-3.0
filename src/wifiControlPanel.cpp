@@ -4,9 +4,6 @@ WebServer server(80);
 
 void initWebServer()
 {
-    if (MDNS.begin("esp32")) NBprintln("MDNS responder started");
-    else NBprintln("MDNS failed to start");
-
     server.enableCORS(true);
     // server.enableCrossOrigin(true);
     
@@ -17,6 +14,13 @@ void initWebServer()
 
     server.begin();
     NBprintln("HTTP server started");
+}
+
+void restartServer()
+{
+    server.stop();
+    server.begin();
+    CMDprintln("Server started");
 }
 
 void handleWebServer()

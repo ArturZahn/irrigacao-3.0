@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include "aditionalFunctions.h"
 #include "rtc.h"
+#include <WiFi.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 
 // #define disableRTC
 // #define jumpOneMinuteEveryGetTimeRequest
@@ -16,5 +19,6 @@
 void initTime();
 unsigned long getTime();
 unsigned int getDayTime();
+bool setTimeAutomatically();
 
 #endif

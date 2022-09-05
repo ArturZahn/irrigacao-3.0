@@ -1,7 +1,7 @@
 #include "rtc.h"
 
 RTClib myRTC;
-
+DS3231 myRTC_DS_tmp;
 DateTime t;
 
 void initRTC()
@@ -19,6 +19,11 @@ void initRTC()
     }
 }
 
+DateTime getDateTime()
+{
+    return t;
+}
+
 int readTimeFromRTC()
 {
     // you need to call "checkIfRTCIsWorking()" before calling "readTimeFromRTC()"
@@ -32,6 +37,66 @@ bool checkIfRTCIsWorking()
     {
         return false;
     }
+
+    return true;
+}
+
+void setTime(byte second, byte minute, byte hour, byte date, byte month, int year)
+{
+    myRTC_DS_tmp.setSecond(second);
+    myRTC_DS_tmp.setMinute(minute);
+    myRTC_DS_tmp.setHour(hour);
+    myRTC_DS_tmp.setDate(date);
+    myRTC_DS_tmp.setMonth(month);
+    myRTC_DS_tmp.setYear(year - 2000);
+}
+
+// hh:mm:ss dd/mm/yyyy 
+// hh:mm:ss yyyy-mm-dd
+bool setTime(String datetime)
+{
+    byte second, minute, hour, day, month;
+    int year;
+    char carac = ':';
+
+    byte tp = datetime.indexOf(carac);
+    if(tp == -1) return false;
+    hour = datetime.substring(0, tp).toInt();
+    datetime = datetime.substring(tp+1);
+    
+    tp = datetime.indexOf(carac);
+    if(tp == -1) return false;
+    minute = datetime.substring(0, tp).toInt();
+    datetime = datetime.substring(tp+1);
+    
+    tp = datetime.indexOf(' ');
+    if(tp == -1) return false;
+    second = datetime.substring(0, tp).toInt();
+    datetime = datetime.substring(tp+1);
+
+    carac = '/';
+    bool portugueseFormat = true;
+    if(datetime.indexOf(carac) == -1)
+    {
+        carac = '-';
+        portugueseFormat = false;
+    }
+
+    tp = datetime.indexOf(carac);
+    if(tp == -1) return false;
+    if(portugueseFormat) day = datetime.substring(0, tp).toInt();
+    else year = datetime.substring(0, tp).toInt();
+    datetime = datetime.substring(tp+1);
+
+    tp = datetime.indexOf(carac);
+    if(tp == -1) return false;
+    month = datetime.substring(0, tp).toInt();
+    datetime = datetime.substring(tp+1);
+
+    if(portugueseFormat) year = datetime.toInt();
+    else day = datetime.toInt();
+
+    setTime(second, minute, hour, day, month, year);
 
     return true;
 }

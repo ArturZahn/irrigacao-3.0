@@ -8,8 +8,22 @@ void cliRunCommand(String cmd)
     if(cmd == F("mostrarProgramacoes")) { showProgramations(); setCmdState(true); }
     else if(cmd == F("alterarProgramacao")) handleAlterProgramation(args);
 
-    // else if(cmd == F("mostrarHora")) CMDprintln("showTime();"); //showTime();
-    // else if(cmd == F("ajustarHora")) CMDprintln("ajustTime(args);"); //ajustTime(args);
+    else if(cmd == F("mostrarHora")) CMDprintln(getDayTime());
+    else if(cmd == F("ajustarHora")) {
+        if(args == "" || args == "automatico") {
+            CMDprintln("defindo hora automaticamente...");
+            if(setTimeAutomatically()){
+                CMDprint("definido para ");
+                CMDprintln(getTime());
+            }
+            else CMDprintln("Não foi possível definir");
+        }
+        else
+        {
+            setTime(args);
+            CMDprint("hora definida");
+        }
+    }
     
     else if(cmd == F("pausarProgramacoes")) {
         setCmdState(true);
@@ -66,6 +80,9 @@ void cliRunCommand(String cmd)
     else if(cmd == F("reiniciar")) restartSystem();
 
     else if(cmd == F("wifi")) exeWifiCommand(args);
+    
+    else if(cmd == F("debugarM")) initMDNS();
+    else if(cmd == F("debugarS")) restartServer();
 
     else if(cmd == F("mostrarInformacoes")) handleShowInformation();
 

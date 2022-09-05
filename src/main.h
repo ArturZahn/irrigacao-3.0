@@ -12,6 +12,14 @@
 #include "automaticMode.h"
 #include "debugging.h"
 
+#define enableOTA
+#ifdef enableOTA
+#include "ota.h"
+#endif
+
+// #define soilMoistureSensor 34
+// #define panelButton 35
+
 void setup();
 void loop();
 

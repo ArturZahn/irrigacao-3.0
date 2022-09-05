@@ -10,6 +10,10 @@ bool isAutomaticModeEnabled()
 bool changingMode = false;
 void setAutomaticMode(bool mode)
 {
+    //#$#
+    // return;
+    //#$# 
+
     if(changingMode) return;
 
     changingMode = true;
@@ -26,11 +30,11 @@ void setAutomaticMode(bool mode)
 
 void handleEnterAutomaticMode()
 {
-    deactivateManualSection();
+    deactivateManualSection(); //#$#
 }
 
 void handleLeaveAutomaticMode()
 {
-    stopEvent();
-    pauseAutomaticProgramations();
+    stopEvent(); //#$#
+    pauseAutomaticProgramations(); //#$#
 }

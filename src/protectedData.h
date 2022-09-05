@@ -11,7 +11,6 @@
 
 #define numOfProgramations 5
 
-
 struct protectedData
 {
     programationRawData programationsRawData[numOfProgramations];

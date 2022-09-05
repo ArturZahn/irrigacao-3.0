@@ -7,8 +7,12 @@
 #include "handlePrint.h"
 #include "aditionalFunctions.h"
 #include "cli.h"
+#include "ota.h"
 
 void initWebServer();
+
+void restartServer();
+
 void handleWebServer();
 void handleNotFound();
 void handleRoot();

@@ -7,7 +7,12 @@ unsigned long wifiStartedConnect = 0;
 
 void initWifi()
 {
+    // WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+    // WiFi.setHostname("irrigacao"); //define hostname
+
     WiFi.mode(WIFI_STA);
+    
+
 
     initWebServer();
     
@@ -18,9 +23,17 @@ void initWifi()
         if(success){
             CMDprintln("Conectado");
             showIp();
+            initMDNS();
         }
         else CMDprintln("Falha ao conectar à rede");
     });
+}
+
+void initMDNS()
+{
+    MDNS.end();
+    if (MDNS.begin(nameHost)) NBprintln("MDNS responder started");
+    else NBprintln("MDNS failed to start");
 }
 
 unsigned long lastVerify = 0;
