@@ -17,7 +17,6 @@
 #include "ota.h"
 #endif
 
-// #define soilMoistureSensor 34
 // #define panelButton 35
 
 void setup();

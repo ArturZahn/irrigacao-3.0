@@ -86,6 +86,19 @@ void cliRunCommand(String cmd)
 
     else if(cmd == F("mostrarInformacoes")) handleShowInformation();
 
+    else if(cmd == F("mostrarLeiturasDeSolo")) {
+        showSoilMeasurings();
+        setCmdState(true);
+    }
+    else if(cmd == F("mostrarEApagarLeiturasDeSolo")) {
+        showAndClearSoilMeasurings();
+        setCmdState(true);
+    }
+    else if(cmd == F("apagarLeiturasDeSolo")) {
+        clearSoilMeasurings();
+        setCmdState(true);
+    }
+
     // else if(cmd == F("mostrarErros")) CMDprintln("showErrors();"); //showErrors();
     // else if(cmd == F("limparErros")) CMDprintln("clearErrors();"); //clearErrors();
     

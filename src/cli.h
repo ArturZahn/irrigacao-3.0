@@ -9,6 +9,7 @@
 #include "manualSection.h"
 #include "timeFuncs.h"
 #include "wifiHandler.h"
+#include "watchSoil.h"
 
 void cliRunCommand(String cmd);
 

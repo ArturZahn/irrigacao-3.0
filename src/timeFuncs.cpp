@@ -18,7 +18,8 @@ unsigned long getTime()
 {
     #ifdef disableRTC
         #ifdef jumpOneMinuteEveryGetTimeRequest
-    temporaryVar_time += 60;
+    // temporaryVar_time += 60;
+    temporaryVar_time += 1;
     return temporaryVar_time;
         #else
     return 50400; // 14:00

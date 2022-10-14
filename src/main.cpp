@@ -13,7 +13,8 @@ void setup()
     readEEPROMData();
     initializeProgramations();
     initWifi();
-    
+    initWatchSoil();
+
     #ifdef enableOTA
     setupOTA();
     #endif
@@ -27,6 +28,7 @@ void loop()
     handleWatchTime();
     handleActiveEvent();
     handleSerialControl();
+    handleWatchSoil();
 
     // setHandlingWifi(true);
     handleWifi();
@@ -40,6 +42,8 @@ void loop()
     #endif
 
     // NBprint("0 4096 ");
+    // NBprint(millis());
+    // NBprint(" ");
     // NBprintln(analogRead(soilMoistureSensor));
     // NBprintln(digitalRead(panelButton));
 
