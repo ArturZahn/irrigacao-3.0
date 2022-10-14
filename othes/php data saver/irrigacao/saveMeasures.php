@@ -7,17 +7,18 @@ $url = "http://$espIp/cli/mostrarEApagarLeiturasDeSolo";
 
 
 $qtdMax = 100;
+$qtdMaxRequest = 50;
 
 
 $strquery = "INSERT INTO measures (TIME, value, insertTime) VALUES";
 $flag_isthefisrt = true;
-$theraAreMoreToRead = false;
 $count = 0;
 $nOfRequests = 0;
 $qtdPerRequest;
 
 do
 {
+    $theraAreMoreToRead = false;
     $nOfRequests++;
     $data = file_get_contents($url);
     // $data = file_get_contents("http://127.0.0.1/irrigacao/ex.txt");
@@ -70,8 +71,12 @@ do
     }
 
     if($nOfRequests == 1) $qtdPerRequest = $count;
+
+    echo "there are more: ".($theraAreMoreToRead?"true":"false");
+    echo "qtd p request: ".$count+$qtdPerRequest;
+    echo "qtd max: ".$qtdMax;
 }
-while($theraAreMoreToRead && ($count+$qtdPerRequest) <= $qtdMax);
+while($nOfRequests <= $qtdMaxRequest && $theraAreMoreToRead && ($count+$qtdPerRequest) <= $qtdMax);
 
 echo "query: \"$strquery\"\n\n";
 if($count != 0) $con->query($strquery);
