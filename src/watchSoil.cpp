@@ -25,7 +25,7 @@ void handleWatchSoil()
 
 int currentSpacedSubMeasure = 0;
 unsigned long lastSpacedSubMeasure = 0;
-unsigned int measuresSum = 0;
+unsigned long measuresSum = 0;
 void startMeasuringSoil()
 {
     if(currentSpacedSubMeasure != 0) return;
@@ -66,19 +66,15 @@ unsigned int tempAlalogReadSimulator = 0;
 #endif
 unsigned int makeSubMeasure()
 {
-    unsigned int tempMeasuresSum = 0;
+    unsigned long tempMeasuresSum = 0;
     for(int i = 0; i < numberOfSubSubMeasures; i++)
     {
         #ifndef fakeSoilMoistureSensor
-        unsigned int temp = analogRead(soilMoistureSensor);
+        tempMeasuresSum += analogRead(soilMoistureSensor);
         #else
         tempAlalogReadSimulator++;
-        unsigned int temp = tempAlalogReadSimulator;
+        tempMeasuresSum += tempAlalogReadSimulator;
         #endif
-        
-        tempMeasuresSum += temp;
-        // NBprint(" ");
-        // NBprint(temp);
     }
 
     // NBprint(" > ");

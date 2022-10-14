@@ -6,13 +6,12 @@
 
 #define soilMoistureSensor 34
 
-// #define timeBetweenSoilMeasures 1800000 // 30 min
-#define timeBetweenSoilMeasures 15000
-#define numberOfSpacedSubMeasures 3
+#define timeBetweenSoilMeasures 60000 // 1 min
+// #define timeBetweenSoilMeasures 600000 // 10 min
+#define numberOfSpacedSubMeasures 10
 #define delayBetweenSpacedSubMeasures 3000
-#define numberOfSubSubMeasures 10
-// #define numberOfMeasuresArray 10000
-#define numberOfMeasuresArray 10000
+#define numberOfSubSubMeasures 20
+#define numberOfMeasuresArray 9960
 #define maxNumberOfMeasuresLimited 10
 
 // #define fakeSoilMoistureSensor
@@ -21,9 +20,6 @@ typedef struct {
     unsigned int value;
     unsigned long time;
 } measures_stc;
-
-// unsigned int nOfStoredMeasures;
-// measures_stc measures[numberOfMeasuresArray];
 
 void initWatchSoil();
 void handleWatchSoil();
