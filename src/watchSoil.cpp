@@ -2,6 +2,7 @@
 
 unsigned int nOfStoredMeasures;
 measures_stc measures[numberOfMeasuresArray];
+bool debugSensorStatus = false;
 
 void initWatchSoil()
 {
@@ -21,6 +22,7 @@ void handleWatchSoil()
     }
 
     handleSoilMeasuring();
+    handleDebugSensor();
 }
 
 int currentSpacedSubMeasure = 0;
@@ -163,4 +165,16 @@ void showAndClearSoilMeasurings()
 {
     unsigned int qtd = showSoilMeasuringsLimited(0);
     clearSoilMeasurings(qtd);
+}
+
+void setDebugSensor(bool stt)
+{
+    debugSensorStatus = stt;
+}
+
+void handleDebugSensor()
+{
+    if(!debugSensorStatus) return;
+
+    NBprintln(makeSubMeasure());
 }

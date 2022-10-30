@@ -33,5 +33,7 @@ void showSoilMeasurings();
 void clearSoilMeasurings(unsigned int);
 void clearSoilMeasurings();
 void showAndClearSoilMeasurings();
+void setDebugSensor(bool);
+void handleDebugSensor();
 
 #endif

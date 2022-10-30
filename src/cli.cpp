@@ -98,6 +98,14 @@ void cliRunCommand(String cmd)
         clearSoilMeasurings();
         setCmdState(true);
     }
+    else if(cmd == F("iniciarDebugSensor")) {
+        setDebugSensor(true);
+        setCmdState(true);
+    }
+    else if(cmd == F("pararDebugSensor")) {
+        setDebugSensor(false);
+        setCmdState(true);
+    }
 
     // else if(cmd == F("mostrarErros")) CMDprintln("showErrors();"); //showErrors();
     // else if(cmd == F("limparErros")) CMDprintln("clearErrors();"); //clearErrors();
