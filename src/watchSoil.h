@@ -11,7 +11,8 @@
 #define numberOfSpacedSubMeasures 10
 #define delayBetweenSpacedSubMeasures 3000
 #define numberOfSubSubMeasures 20
-#define numberOfMeasuresArray 9960
+// #define numberOfMeasuresArray 9960
+#define numberOfMeasuresArray 5000
 #define maxNumberOfMeasuresLimited 10
 
 // #define fakeSoilMoistureSensor
