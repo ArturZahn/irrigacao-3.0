@@ -10,7 +10,6 @@ bool cmdState = false;
 void initPrint()
 {
     Serial.begin(115200);
-    // clearLogBuffer();
 }
 
 void setCmdState(bool s)
@@ -73,7 +72,6 @@ void clearCmdBuffer()
 // print without buffering
 void LOGprint(String s)
 {
-    logBufferAdd(s);
     Serial.print(s);
 }
 

@@ -2,7 +2,6 @@
 #define HANDLEPRINT_H
 
 #include <Arduino.h>
-#include "remoteSerial.h"
 
 void initPrint();
 void setCmdState(bool s);

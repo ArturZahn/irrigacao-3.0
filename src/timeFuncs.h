@@ -7,8 +7,8 @@
 #include <WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-#include "wifiHandler.h"
-#include "handlePrint.h"
+#include "programations.h"
+// #include "wifiHandler.h"
 
 // #define disableRTC
 // #define jumpOneMinuteEveryGetTimeRequest
@@ -24,12 +24,5 @@ unsigned int getDayTime();
 String getStrDateTime();
 String getStrDateTime(unsigned long);
 bool setTimeAutomatically();
-
-
-#define timeBetweenSucessfulTimeAjust 86400000
-#define timeBetweenTimeAjustAttemps    3600000
-// #define timeBetweenSucessfulTimeAjust 10000
-// #define timeBetweenTimeAjustAttemps    1000
-void handlePeriodicTimeAjust();
 
 #endif

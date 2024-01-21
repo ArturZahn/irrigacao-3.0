@@ -153,7 +153,7 @@ function contentReady()
 
     loadMainPage();
 
-    openPage("cliPage")
+    // openPage("cliPage")
 }
 
 function getData(functionToRunAfterFinishing)
