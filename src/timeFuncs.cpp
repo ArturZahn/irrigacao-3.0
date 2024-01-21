@@ -59,28 +59,28 @@ String getStrDateTime(unsigned long unixTime)
     DateTime t(unixTime);
     String str = "";
     if(t.hour() < 10) str += "0";
-    str += t.hour()+":";
+    str += ((String)t.hour())+":";
 
     if(t.minute() < 10) str += "0";
-    str += t.minute()+":";
+    str += ((String)t.minute())+":";
 
     if(t.second() < 10) str += "0";
-    str += t.second()+" ";
+    str += ((String)t.second())+" ";
 
     if(t.day() < 10) str += "0";
-    str += t.day()+"/";
+    str += ((String)t.day())+"/";
 
     if(t.month() < 10) str += "0";
-    str += t.month()+"/";
+    str += ((String)t.month())+"/";
 
-    str += t.year();
+    str += ((String)t.year());
 
     return str;
 }
 
 bool setTimeAutomatically()
 {
-    if(!isConnectedToWifi()) return false;
+    if(WiFi.status() != WL_CONNECTED) return false;
 
     WiFiUDP ntpUDP;
     NTPClient timeClient(ntpUDP);
@@ -94,9 +94,9 @@ bool setTimeAutomatically()
     }
 
     DateTime newDT = timeClient.getEpochTime();
-        
+
     RPprint("Time set to ");
-    // RPprintln(getStrDateTime(newDT.unixtime()));
+    RPprintln(getStrDateTime(newDT.unixtime()));
 
     setTime(
         (byte) newDT.second(),
@@ -117,13 +117,11 @@ void handlePeriodicTimeAjust()
     if(!(millis() - lastSucessfulTimeAjust > timeBetweenSucessfulTimeAjust))
         return;
 
-    lastTimeAjustAttempt = millis();
 
     if(!(millis() - lastTimeAjustAttempt > timeBetweenTimeAjustAttemps))
         return;
 
-    LOGprint(getStrDateTime());
-    LOGprintln(" Set time attempt");
+    lastTimeAjustAttempt = millis();
     
     if(setTimeAutomatically())
         lastSucessfulTimeAjust = lastTimeAjustAttempt;
