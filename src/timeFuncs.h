@@ -7,8 +7,10 @@
 #include <WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
+#include "wifiHandler.h"
+#include "handlePrint.h"
 
-// #define disableRTC
+#define disableRTC
 // #define jumpOneMinuteEveryGetTimeRequest
 
 #define timeEmpty 0x7FF

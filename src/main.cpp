@@ -38,7 +38,7 @@ void loop()
     handleWifi();
     // setHandlingWifi(false);
 
-    handlePeriodicTimeAjust();
+    // handlePeriodicTimeAjust();
     handleWatchRainData();
 
     #ifdef enableOTA

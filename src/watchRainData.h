@@ -3,9 +3,8 @@
 
 #include <Arduino.h>
 #include <vector>
-#include <WiFiClient.h>
 #include "timeFuncs.h"
-#include "wifiHandler.h"
+#include <WiFiClient.h>
 
 // #define timeBetweenSucessfulRainDataRequest 1800000
 // #define timeBetweenRainDataRequestAttemps    300000
@@ -22,6 +21,8 @@ typedef struct {
 
 void handleWatchRainData();
 bool updateRainData();
+bool debugRainData();
+bool updateRainData(bool);
 bool filterData();
 bool readResponseUntilAndSaveToString(String, String*);
 bool readResponseUntil(String);

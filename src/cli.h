@@ -10,6 +10,7 @@
 #include "timeFuncs.h"
 #include "wifiHandler.h"
 // #include "watchSoil.h"
+// #include "watchRainData.h"
 #include "watchRainData.h"
 
 void cliRunCommand(String cmd);

@@ -86,7 +86,9 @@ void cliRunCommand(String cmd)
 
     else if(cmd == F("mostrarInformacoes")) handleShowInformation();
 
-    else if(cmd == F("oi")) CMDprintln("Eae chefe, blz?");
+    else if(cmd == F("oi")) {
+        CMDprintln("Eae chefe, blz?");
+    }
 
     // else if(cmd == F("mostrarLeiturasDeSolo")) {
     //     showSoilMeasurings();
@@ -111,7 +113,7 @@ void cliRunCommand(String cmd)
 
     // else if(cmd == F("mostrarErros")) CMDprintln("showErrors();"); //showErrors();
     // else if(cmd == F("limparErros")) CMDprintln("clearErrors();"); //clearErrors();
-
+    
     // else if(cmd == F("mostrarChuva")) printRainData1234567890();
     else if(cmd == F("mostrarChuva")) printRainData();
     else if(cmd == F("limparDadosChuva")) clearRainData();
