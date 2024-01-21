@@ -2,6 +2,9 @@
 
 void setup()
 {
+    // initialize remote serial first to log all serial data since the begining
+    initializeRemoteSerial();
+
     #ifdef debugWifi
     initDebug();
     #endif
@@ -13,7 +16,7 @@ void setup()
     readEEPROMData();
     initializeProgramations();
     initWifi();
-    initWatchSoil();
+    // initWatchSoil();
 
     #ifdef enableOTA
     setupOTA();
@@ -21,6 +24,7 @@ void setup()
 
     // pinMode(soilMoistureSensor, INPUT);
     // pinMode(panelButton, INPUT);
+
 }
 
 void loop()
@@ -28,11 +32,14 @@ void loop()
     handleWatchTime();
     handleActiveEvent();
     handleSerialControl();
-    handleWatchSoil();
+    // handleWatchSoil();
 
     // setHandlingWifi(true);
     handleWifi();
     // setHandlingWifi(false);
+
+    handlePeriodicTimeAjust();
+    handleWatchRainData();
 
     #ifdef enableOTA
         #if defined(ESP32_RTOS) && defined(ESP32)
@@ -41,11 +48,11 @@ void loop()
         #endif
     #endif
 
-    // NBprint("0 4096 ");
-    // NBprint(millis());
-    // NBprint(" ");
-    // NBprintln(analogRead(soilMoistureSensor));
-    // NBprintln(digitalRead(panelButton));
+    // LOGprint("0 4096 ");
+    // LOGprint(millis());
+    // LOGprint(" ");
+    // LOGprintln(analogRead(soilMoistureSensor));
+    // LOGprintln(digitalRead(panelButton));
 
 
     #ifdef debugWifi

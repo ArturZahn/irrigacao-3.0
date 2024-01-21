@@ -31,7 +31,7 @@ unsigned long measuresSum = 0;
 void startMeasuringSoil()
 {
     if(currentSpacedSubMeasure != 0) return;
-    // NBprintln("Starting measure...");
+    // LOGprintln("Starting measure...");
 
     currentSpacedSubMeasure = 1;
     lastSpacedSubMeasure = millis() - delayBetweenSpacedSubMeasures - 100;
@@ -40,8 +40,8 @@ void startMeasuringSoil()
 
 void handleSoilMeasuring()
 {
-    // NBprint("ctr: ");
-    // NBprintln(currentSpacedSubMeasure);
+    // LOGprint("ctr: ");
+    // LOGprintln(currentSpacedSubMeasure);
     if(currentSpacedSubMeasure == 0) return;
 
     if(millis() - lastSpacedSubMeasure > delayBetweenSpacedSubMeasures)
@@ -49,7 +49,7 @@ void handleSoilMeasuring()
         lastSpacedSubMeasure = millis();
 
         
-        // NBprint("making sub measure...");
+        // LOGprint("making sub measure...");
 
         measuresSum += makeSubMeasure();
         currentSpacedSubMeasure++;
@@ -79,8 +79,8 @@ unsigned int makeSubMeasure()
         #endif
     }
 
-    // NBprint(" > ");
-    // NBprintln(tempMeasuresSum/numberOfSubSubMeasures);
+    // LOGprint(" > ");
+    // LOGprintln(tempMeasuresSum/numberOfSubSubMeasures);
 
     return tempMeasuresSum/numberOfSubSubMeasures;
 }
@@ -91,7 +91,7 @@ void handleNewMeasure(unsigned int newMeasure)
     {
         // if buffer is full, remove oldest measure
 
-        // NBprintln("Buffer cheio");
+        // LOGprintln("Buffer cheio");
         for (int i = 1; i < numberOfMeasuresArray; i++)
         {
             measures[i-1].time = measures[i].time;
@@ -100,7 +100,7 @@ void handleNewMeasure(unsigned int newMeasure)
         nOfStoredMeasures--;
     }
     
-    // NBprintln("adicionando ao buffer\n");
+    // LOGprintln("adicionando ao buffer\n");
     measures[nOfStoredMeasures].value = newMeasure;
     measures[nOfStoredMeasures].time = getTime();
     nOfStoredMeasures++;
@@ -176,5 +176,5 @@ void handleDebugSensor()
 {
     if(!debugSensorStatus) return;
 
-    NBprintln(makeSubMeasure());
+    LOGprintln(makeSubMeasure());
 }

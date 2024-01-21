@@ -7,15 +7,16 @@
 #include <Wire.h>
 #include <DS3231.h>
 #include "handlePrint.h"
-
+#include "watchRainData.h"
 
 void initRTC();
 DateTime getDateTime();
 int readTimeFromRTC();
 bool checkIfRTCIsWorking();
 
-void setTime(byte second, byte minute, byte hour, byte date, byte month, int year);
-bool setTime(String datetime);
+bool parseTime(String, byte&, byte&, byte&, byte&, byte&, int&);
+void setTime(byte, byte, byte, byte, byte, int);
+bool setTime(String);
 
 
 

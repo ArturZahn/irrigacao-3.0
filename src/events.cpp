@@ -1,8 +1,40 @@
 #include "events.h"
 
+
+class eventClass
+{
+    private:
+
+    bool isThereEventRunning;
+    Programation activeProgamation;
+    byte activeProgamationNum;
+
+    byte stagesCurrentStage;
+    unsigned long durationOfCurrentStage;
+    unsigned long stageStartTime;
+
+    void setupNewEvent();
+    unsigned long getDurationOfCurrentStage();
+    void changeToNextStage();
+    void setupCurrentStage();
+    void fireStartOfCurrentStage();
+    void fireEndOfCurrentStage();
+
+    public:
+
+    eventClass();
+    void start(Programation programationToStart);
+    bool start(byte programationNumToStart);
+    // bool isEventRunning();
+    void handle();
+    void stopEvent();
+    byte getActiveProgramation();
+
+};
+
 void checkEvents(int *now)
 {
-    // NBprintln("checking events...");
+    // LOGprintln("checking events...");
 
     byte programationNumToStart = findProgramationToStartNow(now);
     if(programationNumToStart != programationEmpty)
@@ -84,15 +116,15 @@ void eventClass::handle()
 
 void eventClass::fireStartOfCurrentStage()
 {
-    NBprint("Start of stage ");
-    NBprintln(eventClass::stagesCurrentStage);
+    LOGprint("Start of stage ");
+    LOGprintln(eventClass::stagesCurrentStage);
     eventClass::activeProgamation.fireStartOfStage(eventClass::stagesCurrentStage);
 }
 
 void eventClass::fireEndOfCurrentStage()
 {
-    NBprint("End of stage ");
-    NBprintln(eventClass::stagesCurrentStage);
+    LOGprint("End of stage ");
+    LOGprintln(eventClass::stagesCurrentStage);
     eventClass::activeProgamation.fireEndOfStage(eventClass::stagesCurrentStage);
 }
 

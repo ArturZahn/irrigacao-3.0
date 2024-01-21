@@ -6,8 +6,8 @@ protectedData d;
 
 void initializeEEPROM()
 {
-    if(!EEPROM.begin(EEPROM_SIZE)) NBprintln("failed to initialise EEPROM");
-    else NBprintln("EEPROM initialized");
+    if(!EEPROM.begin(EEPROM_SIZE)) LOGprintln("failed to initialise EEPROM");
+    else LOGprintln("EEPROM initialized");
 }
 
 void storeEEPROMData()

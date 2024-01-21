@@ -1,7 +1,8 @@
 #include "handlePrint.h"
 
-char logBuffer[logBufferSize+1];
-unsigned int logBufferIndex = 0;
+
+unsigned int cmdBufferIndex = 0;
+char cmdBuffer[cmdBufferSize+1];
 // bool bufferOverflowed = false;
 bool LogBufferingState = false;
 bool cmdState = false;
@@ -9,6 +10,7 @@ bool cmdState = false;
 void initPrint()
 {
     Serial.begin(115200);
+    // clearLogBuffer();
 }
 
 void setCmdState(bool s)
@@ -20,135 +22,147 @@ bool getCmdState()
     return cmdState;
 }
 
-void startLogBuffering()
+void startCmdBuffering()
 {
-    clearLogBuffer();
+    clearCmdBuffer();
     LogBufferingState = true;
 }
-void stopLogBuffering()
+void stopCmdBuffering()
 {
-    clearLogBuffer();
+    clearCmdBuffer();
     LogBufferingState = false;
 }
-bool getLogBufferingState()
+bool getCmdBufferingState()
 {
     return LogBufferingState;
 }
 
 
-void bufferPrint(String s)
+void cmdBufferPrint(String s)
 {
-    NBprint(s);
+    LOGprint(s);
 
     if(!LogBufferingState) return;
 
-    for(char& c : s) {
-        if(logBufferIndex < logBufferSize)
+    for(char& c : s)
+    {
+        if(cmdBufferIndex < cmdBufferSize)
         {
-            logBuffer[logBufferIndex] = c;
-            logBufferIndex++;
+            cmdBuffer[cmdBufferIndex] = c;
+            cmdBufferIndex++;
         }
         // else bufferOverflowed = true;
     }
 }
 
-char* getLogBuffer()
+char* getCmdBuffer()
 {
-    // if(cmdState) return strcat("OK\n", logBuffer);
-    // else return strcat("Erro\n", logBuffer);
-    return logBuffer;
+    // if(cmdState) return strcat("OK\n", cmdBuffer);
+    // else return strcat("Erro\n", cmdBuffer);
+    return cmdBuffer;
 }
 
-void clearLogBuffer()
+void clearCmdBuffer()
 {
-    memset(logBuffer, 0, sizeof(logBuffer));
-    logBufferIndex = 0;
+    memset(cmdBuffer, 0, sizeof(cmdBuffer));
+    cmdBufferIndex = 0;
     cmdState = false;
     // bufferOverflowed = false;
 }
 
 // print without buffering
-void NBprint(String s)
+void LOGprint(String s)
 {
+    logBufferAdd(s);
     Serial.print(s);
 }
 
-void NBprintln(String s)
+void LOGprintln(String s)
 {
-    NBprint(s);
-    NBprint("\n");
+    LOGprint(s);
+    LOGprint("\n");
 }
 
 
-void NBprint(char c)
+void LOGprint(char c)
 {
-    NBprint(String(c));
+    LOGprint(String(c));
 }
 
-void NBprint(unsigned char b)
+void LOGprint(unsigned char b)
 {
-    NBprint(String(b));
+    LOGprint(String(b));
 }
 
-void NBprint(int n)
+void LOGprint(int n)
 {
-    NBprint(String(n));
+    LOGprint(String(n));
 }
 
-void NBprint(unsigned int n)
+void LOGprint(unsigned int n)
 {
-    NBprint(String(n));
+    LOGprint(String(n));
 }
 
-void NBprint(long n)
+void LOGprint(long n)
 {
-    NBprint(String(n));
+    LOGprint(String(n));
 }
 
-void NBprint(unsigned long n)
+void LOGprint(unsigned long n)
 {
-    NBprint(String(n));
+    LOGprint(String(n));
 }
 
-void NBprintln(void)
+void LOGprint(double n)
 {
-    NBprintln("");
+    LOGprint(String(n));
 }
 
-void NBprintln(char c)
+void LOGprintln(void)
 {
-    NBprintln(String(c));
+    LOGprintln("");
 }
 
-void NBprintln(unsigned char b)
+void LOGprintln(char c)
 {
-    NBprintln(String(b));
+    LOGprintln(String(c));
 }
 
-void NBprintln(int num)
+void LOGprintln(unsigned char b)
 {
-    NBprintln(String(num));
+    LOGprintln(String(b));
 }
 
-void NBprintln(unsigned int num)
+void LOGprintln(int num)
 {
-    NBprintln(String(num));
+    LOGprintln(String(num));
 }
 
-void NBprintln(long num)
+void LOGprintln(unsigned int num)
 {
-    NBprintln(String(num));
+    LOGprintln(String(num));
 }
 
-void NBprintln(unsigned long num)
+void LOGprintln(long num)
 {
-    NBprintln(String(num));
+    LOGprintln(String(num));
+}
+
+void LOGprintln(unsigned long num)
+{
+    LOGprintln(String(num));
+}
+
+void LOGprintln(double num)
+{
+    LOGprintln(String(num));
 }
 
 // print CMD
 void CMDprint(String s)
 {
-    bufferPrint(s);
+    cmdBufferPrint(s);
 }
 
 void CMDprintln(String s)
@@ -183,6 +197,11 @@ void CMDprint(long n)
 }
 
 void CMDprint(unsigned long n)
+{
+    CMDprint(String(n));
+}
+
+void CMDprint(double n)
 {
     CMDprint(String(n));
 }
@@ -222,11 +241,16 @@ void CMDprintln(unsigned long num)
     CMDprintln(String(num));
 }
 
-// CMDprint if log buffering is active, else NBprint
+void CMDprintln(double num)
+{
+    CMDprintln(String(num));
+}
+
+// CMDprint if log buffering is active, else LOGprint
 void RPprint(String s)
 {
-    if(LogBufferingState) bufferPrint(s);
-    else NBprint(s);
+    if(LogBufferingState) cmdBufferPrint(s);
+    else LOGprint(s);
 }
 
 void RPprintln(String s)
@@ -265,6 +289,11 @@ void RPprint(unsigned long n)
     RPprint(String(n));
 }
 
+void RPprint(double n)
+{
+    RPprint(String(n));
+}
+
 void RPprintln(void)
 {
     RPprintln("");
@@ -296,6 +325,11 @@ void RPprintln(long num)
 }
 
 void RPprintln(unsigned long num)
+{
+    RPprintln(String(num));
+}
+
+void RPprintln(double num)
 {
     RPprintln(String(num));
 }

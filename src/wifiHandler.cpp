@@ -32,8 +32,8 @@ void initWifi()
 void initMDNS()
 {
     MDNS.end();
-    if (MDNS.begin(nameHost)) NBprintln("MDNS responder started");
-    else NBprintln("MDNS failed to start");
+    if (MDNS.begin(nameHost)) LOGprintln("MDNS responder started");
+    else LOGprintln("MDNS failed to start");
 }
 
 unsigned long lastVerify = 0;

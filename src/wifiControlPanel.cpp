@@ -10,10 +10,11 @@ void initWebServer()
     server.onNotFound(handleNotFound);
     server.on("/", handleRoot);
     server.on("/needToUpdate", handleNeedToUpdate);
+    server.on("/remoteSerial", handleRemoteSerial);
 
 
     server.begin();
-    NBprintln("HTTP server started");
+    LOGprintln("HTTP server started");
 }
 
 void restartServer()
@@ -21,6 +22,11 @@ void restartServer()
     server.stop();
     server.begin();
     CMDprintln("Server started");
+}
+
+WebServer* getWebServerInstance()
+{
+    return &server;
 }
 
 void handleWebServer()
@@ -51,20 +57,21 @@ void handleNotFound() {
 }
 
 void handleRoot() {
-//   server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\"http://192.168.0.101:5500/html_ctrl_panel/loader.js\"></script></body></html>");
-  server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\"https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/loader.js\"></script></body></html>");
+  server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\""+serverBaseUrl+"/html_ctrl_panel/loader.js\"></script></body></html>");
+//   server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\"http://192.168.1.5:5500/html_ctrl_panel/loader.js\"></script></body></html>");
+//   server.send(200, "text/html", "<!DOCTYPE html><html lang=\"pt-br\"><head></head><body><script>var espAddress = \""+((String)WiFi.localIP().toString())+"\";</script><script src=\"https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/loader.js\"></script></body></html>");
 }
 
 unsigned int updateNumber = 0;
 void handleCli(String fullCmd)
 {
-    startLogBuffering();
+    startCmdBuffering();
     cliRunCommand(fullCmd);
     int state;
     if(getCmdState()) state = 200;
     else state = 400;
-    server.send(state, "text/plain", getLogBuffer());
-    stopLogBuffering();
+    server.send(state, "text/plain", getCmdBuffer());
+    stopCmdBuffering();
 }
 
 void setNeedToUpdate()
@@ -75,4 +82,10 @@ void setNeedToUpdate()
 void handleNeedToUpdate()
 {
     server.send(200, "text/plain", (String) updateNumber);
+}
+
+void handleRemoteSerial()
+{
+    WebServer* server = getWebServerInstance();
+    server->send(200, "text/html", getLogBufferStr());
 }

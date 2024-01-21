@@ -1,0 +1,31 @@
+// #ifndef WATCHRAINDATA_H
+// #define WATCHRAINDATA_H
+
+// #include <Arduino.h>
+// #include <vector>
+// #include "timeFuncs.h"
+
+// #define timeBetweenSucessfulRainDataRequest1234567890 1800000
+// #define timeBetweenRainDataRequestAttemps1234567890    300000
+
+// #define maxRainDataAge1234567890 24.0
+// #define milimetersOfRainToConsiderMoist1234567890 10.0
+
+// typedef struct {
+//     unsigned long unixtime;
+//     double rain;
+// } rainData_t1234567890;
+
+// // WiFiClient client_asdasdasd;
+
+// void handleWatchRainData1234567890();
+// bool updateRainData1234567890();
+// bool filterData1234567890();
+// bool readResponseUntilAndSaveToString1234567890(String, String*);
+// bool readResponseUntil1234567890(String);
+// void printRainData1234567890();
+// void filterOutOldData1234567890();
+// unsigned int sumRainFromData1234567890();
+// bool isAlreadyMoist1234567890();
+
+// #endif
