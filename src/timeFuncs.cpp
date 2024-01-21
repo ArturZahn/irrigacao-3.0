@@ -52,50 +52,35 @@ unsigned int getDayTime()
 String getStrDateTime()
 {
     return getStrDateTime(getTime());
-    
-    // LOGprintln("FFFF1");
-    // String r = getStrDateTime(1000);
-    // LOGprintln("FFFF2");
-    // return r;
 }
 
 String getStrDateTime(unsigned long unixTime)
 {
-    // LOGprintln("ASDF1");
     DateTime t(unixTime);
-    // LOGprintln("ASDF2");
     String str = "";
-    // LOGprintln("ASDF3");
     if(t.hour() < 10) str += "0";
-    str += t.hour()+":";
+    str += ((String)t.hour())+":";
 
-    // LOGprintln("ASDF4");
     if(t.minute() < 10) str += "0";
-    str += t.minute()+":";
+    str += ((String)t.minute())+":";
 
-    // LOGprintln("ASDF5");
     if(t.second() < 10) str += "0";
-    str += t.second()+" ";
+    str += ((String)t.second())+" ";
 
-    // LOGprintln("ASDF6");
     if(t.day() < 10) str += "0";
-    str += t.day()+"/";
+    str += ((String)t.day())+"/";
 
-    // LOGprintln("ASDF7");
     if(t.month() < 10) str += "0";
-    str += t.month()+"/";
+    str += ((String)t.month())+"/";
 
-    // LOGprintln("ASDF8");
-    str += t.year();
+    str += ((String)t.year());
 
-    // LOGprintln("ASDF9");
     return str;
 }
 
 bool setTimeAutomatically()
 {
-    return false; // @#@
-    if(!isConnectedToWifi()) return false;
+    if(WiFi.status() != WL_CONNECTED) return false;
 
     WiFiUDP ntpUDP;
     NTPClient timeClient(ntpUDP);
@@ -109,7 +94,7 @@ bool setTimeAutomatically()
     }
 
     DateTime newDT = timeClient.getEpochTime();
-        
+    
     RPprint("Time set to ");
     RPprintln(getStrDateTime(newDT.unixtime()));
 
@@ -129,18 +114,15 @@ unsigned long lastSucessfulTimeAjust = -timeBetweenSucessfulTimeAjust;
 unsigned long lastTimeAjustAttempt = -timeBetweenTimeAjustAttemps;
 void handlePeriodicTimeAjust()
 {
-    unsigned long temp = millis() - lastSucessfulTimeAjust;
-    if(!(temp > timeBetweenSucessfulTimeAjust))
+    if(!(millis() - lastSucessfulTimeAjust > timeBetweenSucessfulTimeAjust))
         return;
 
-    temp = millis() - lastTimeAjustAttempt;
-    if(!(temp > timeBetweenTimeAjustAttemps))
+
+    if(!(millis() - lastTimeAjustAttempt > timeBetweenTimeAjustAttemps))
         return;
 
-    lastTimeAjustAttempt = millis();    
+    lastTimeAjustAttempt = millis();
     
     if(setTimeAutomatically())
-    {
         lastSucessfulTimeAjust = lastTimeAjustAttempt;
-    }
 }

@@ -10,7 +10,6 @@ bool cmdState = false;
 void initPrint()
 {
     Serial.begin(115200);
-    // clearLogBuffer();
 }
 
 void setCmdState(bool s)

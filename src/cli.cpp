@@ -86,9 +86,7 @@ void cliRunCommand(String cmd)
 
     else if(cmd == F("mostrarInformacoes")) handleShowInformation();
 
-    else if(cmd == F("oi")) {
-        CMDprintln("Eae chefe, blz?");
-    }
+    else if(cmd == F("oi")) CMDprintln("Eae chefe, blz?");
 
     // else if(cmd == F("mostrarLeiturasDeSolo")) {
     //     showSoilMeasurings();

@@ -101,7 +101,8 @@ bool parseTime(String datetime, byte& second, byte& minute, byte& hour, byte& da
 bool setTime(String dateTimeStr)
 {
     byte second, minute, hour, day, month; int year;
-    parseTime(dateTimeStr, second, minute, hour, day, month, year);
+    if(!parseTime(dateTimeStr, second, minute, hour, day, month, year))
+        return false;
 
     setTime(second, minute, hour, day, month, year);
 

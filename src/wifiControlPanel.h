@@ -10,7 +10,7 @@
 #include "remoteSerial.h"
 
 // #define serverBaseUrl "http://192.168.1.5:5500"
-#define serverBaseUrl "http://192.168.211.60:5500"
+#define serverBaseUrl "http://192.168.1.83:5500"
 
 void initWebServer();
 void restartServer();

@@ -4,16 +4,10 @@ WiFiClient client_asdasdasd;
 
 std::vector<rainData_t> rainData;
 
+unsigned long lastSucessfulRainDataRequest = 0;
+unsigned long lastRainDataRequestAttempt = 0;
+
 bool updateRainData()
-{
-    updateRainData(false);
-}
-bool debugRainData()
-{
-    LOGprintln("ASD 1");
-    updateRainData(true);
-}
-bool updateRainData(bool printResponseInsteadOfFindingTheData)
 {
     // client_asdasdasd.available();
     if(!isConnectedToWifi()) return false;
@@ -67,23 +61,9 @@ bool updateRainData(bool printResponseInsteadOfFindingTheData)
         return false;
     }
 
-    if(!printResponseInsteadOfFindingTheData) {
-        if(!filterData())
-        {
-            RPprintln("Could not update rain data, could not filter data");
-            return false;
-        }
-    }
-    else
+    if(!filterData())
     {
-        LOGprintln("Response:");
-        while (client_asdasdasd.available()) {
-            char nextChar;
-            client_asdasdasd.readBytes(&nextChar, 1);
-            LOGprint(nextChar);
-        }
-        LOGprintln("ended");
-        client_asdasdasd.stop();
+        RPprintln("Could not update rain data, could not filter data");
         return false;
     }
 
@@ -92,51 +72,34 @@ bool updateRainData(bool printResponseInsteadOfFindingTheData)
 }
 
 
-unsigned long lastSucessfulRainDataRequest = -timeBetweenSucessfulRainDataRequest;
-unsigned long lastRainDataRequestAttempt = -timeBetweenRainDataRequestAttemps;
 void handleWatchRainData()
 {
     if(!(millis() - lastSucessfulRainDataRequest > timeBetweenSucessfulRainDataRequest))
         return;
 
+    lastRainDataRequestAttempt = millis();
+
     if(!(millis() - lastRainDataRequestAttempt > timeBetweenRainDataRequestAttemps))
         return;
         
-    // LOGprintln("PRE");
-    // LOGprint(getStrDateTime());
-    // LOGprint("Asdasd");
+    LOGprint(getStrDateTime());
     LOGprintln(" Get rain attempt");
     
-    lastRainDataRequestAttempt = millis();
-    
-    // if(updateRainData())
-    if(debugRainData())
-    {
+    if(updateRainData())
         lastSucessfulRainDataRequest = lastRainDataRequestAttempt;
-        LOGprintln("Get rain successful");
-    }
 }
 
 bool filterData()
 {
     if (!readResponseUntil(F("<caption>Dados meteorológicos das últimas 12 horas</caption>")))
-    {
-        LOGprintln("FAIL 1");
         return false;
-    }
 
     if (!readResponseUntil("<tbody>"))
-    {
-        LOGprintln("FAIL 2");
         return false;
-    }
 
     String data;
     if (!readResponseUntilAndSaveToString("</tbody>", &data))
-    {
-        LOGprintln("FAIL 3");
         return false;
-    }
 
     while(data.indexOf("\r") != -1) data.replace("\r", "");
     while(data.indexOf("\n") != -1) data.replace("\n", "");
@@ -177,7 +140,6 @@ bool filterData()
             // check if reading already is in vector rainData
             auto it = std::find_if(rainData.begin(), rainData.end(),
                 [dt_unix](const rainData_t& element) {
-                    LOGprintln("FAIL 4");
                     return element.unixtime == dt_unix;
                 }
             );
@@ -197,11 +159,7 @@ bool readResponseUntilAndSaveToString(String searchString, String* savedString)
 
     if(savedString != nullptr) *savedString = "";
 
-    if(!client_asdasdasd.available())
-    {
-        LOGprintln("not available 1");
-        return false;
-    }
+    if(!client_asdasdasd.available()) return false;
 
     do {
         int i = 0;
@@ -210,8 +168,6 @@ bool readResponseUntilAndSaveToString(String searchString, String* savedString)
             char nextChar;
             client_asdasdasd.readBytes(&nextChar, 1);
             if(savedString != nullptr) *savedString += nextChar;
-
-            LOGprint(nextChar);
 
             if (nextChar == searchString[i]) i++;
             else i = 0;
@@ -223,11 +179,6 @@ bool readResponseUntilAndSaveToString(String searchString, String* savedString)
         }
     }
     while (client_asdasdasd.available());
-
-    if(!foundString)
-    {
-        LOGprintln("string not found");
-    }
 
     return foundString;
 }
