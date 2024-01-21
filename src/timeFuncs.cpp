@@ -81,6 +81,7 @@ String getStrDateTime(unsigned long unixTime)
 bool setTimeAutomatically()
 {
     if(WiFi.status() != WL_CONNECTED) return false;
+    // if(!isConnectedToWifi()) return false;
 
     WiFiUDP ntpUDP;
     NTPClient timeClient(ntpUDP);
@@ -114,15 +115,18 @@ unsigned long lastSucessfulTimeAjust = -timeBetweenSucessfulTimeAjust;
 unsigned long lastTimeAjustAttempt = -timeBetweenTimeAjustAttemps;
 void handlePeriodicTimeAjust()
 {
-    if(!(millis() - lastSucessfulTimeAjust > timeBetweenSucessfulTimeAjust))
+    unsigned long temp = millis() - lastSucessfulTimeAjust;
+    if(!(temp > timeBetweenSucessfulTimeAjust))
         return;
 
-
-    if(!(millis() - lastTimeAjustAttempt > timeBetweenTimeAjustAttemps))
+    temp = millis() - lastTimeAjustAttempt;
+    if(!(temp > timeBetweenTimeAjustAttemps))
         return;
 
-    lastTimeAjustAttempt = millis();
+    lastTimeAjustAttempt = millis();    
     
     if(setTimeAutomatically())
+    {
         lastSucessfulTimeAjust = lastTimeAjustAttempt;
+    }
 }

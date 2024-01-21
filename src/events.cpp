@@ -1,6 +1,5 @@
 #include "events.h"
 
-
 void checkEvents(int *now)
 {
     // LOGprintln("checking events...");
