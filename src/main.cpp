@@ -2,6 +2,9 @@
 
 void setup()
 {
+    // initialize remote serial first to log all serial data since the begining
+    initializeRemoteSerial();
+
     #ifdef debugWifi
     initDebug();
     #endif
@@ -34,6 +37,9 @@ void loop()
     // setHandlingWifi(true);
     handleWifi();
     // setHandlingWifi(false);
+
+    handlePeriodicTimeAjust();
+    handleWatchRainData();
 
     #ifdef enableOTA
         #if defined(ESP32_RTOS) && defined(ESP32)

@@ -86,40 +86,37 @@ void cliRunCommand(String cmd)
 
     else if(cmd == F("mostrarInformacoes")) handleShowInformation();
 
-    else if(cmd == F("oi")) CMDprintln("Eae chefe, blz?");
-
-    else if(cmd == F("testar1")) {
-        unsigned long num = args.toInt();
-        CMDprint("num: ");
-        CMDprintln(num);
-        String r = getStrDateTime(num);
-        CMDprint("time: ");
-        CMDprintln(r);
+    else if(cmd == F("oi")) {
+        CMDprintln("Eae chefe, blz?");
     }
 
     // else if(cmd == F("mostrarLeiturasDeSolo")) {
-        //     showSoilMeasurings();
-        //     setCmdState(true);
+    //     showSoilMeasurings();
+    //     setCmdState(true);
     // }
     // else if(cmd == F("mostrarEApagarLeiturasDeSolo")) {
-        //     showAndClearSoilMeasurings();
-        //     setCmdState(true);
+    //     showAndClearSoilMeasurings();
+    //     setCmdState(true);
     // }
     // else if(cmd == F("apagarLeiturasDeSolo")) {
-        //     clearSoilMeasurings();
-        //     setCmdState(true);
+    //     clearSoilMeasurings();
+    //     setCmdState(true);
     // }
     // else if(cmd == F("iniciarDebugSensor")) {
-        //     setDebugSensor(true);
-        //     setCmdState(true);
+    //     setDebugSensor(true);
+    //     setCmdState(true);
     // }
     // else if(cmd == F("pararDebugSensor")) {
-        //     setDebugSensor(false);
-        //     setCmdState(true);
+    //     setDebugSensor(false);
+    //     setCmdState(true);
     // }
 
     // else if(cmd == F("mostrarErros")) CMDprintln("showErrors();"); //showErrors();
     // else if(cmd == F("limparErros")) CMDprintln("clearErrors();"); //clearErrors();
+    
+    // else if(cmd == F("mostrarChuva")) printRainData1234567890();
+    else if(cmd == F("mostrarChuva")) printRainData();
+    else if(cmd == F("limparDadosChuva")) clearRainData();
     
     else
     {

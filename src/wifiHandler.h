@@ -5,6 +5,8 @@
 #include "protectedData.h"
 #include "aditionalFunctions.h"
 #include "wifiControlPanel.h"
+#include <WiFiClient.h>
+
 
 #define nameHost "irrigacao"
 

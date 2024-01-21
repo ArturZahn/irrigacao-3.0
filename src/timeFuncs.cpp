@@ -59,62 +59,46 @@ String getStrDateTime(unsigned long unixTime)
     DateTime t(unixTime);
     String str = "";
     if(t.hour() < 10) str += "0";
-    str += ((String)t.hour())+":";
+    str += t.hour()+":";
 
     if(t.minute() < 10) str += "0";
-    str += ((String)t.minute())+":";
+    str += t.minute()+":";
 
     if(t.second() < 10) str += "0";
-    str += ((String)t.second())+" ";
+    str += t.second()+" ";
 
     if(t.day() < 10) str += "0";
-    str += ((String)t.day())+"/";
+    str += t.day()+"/";
 
     if(t.month() < 10) str += "0";
-    str += ((String)t.month())+"/";
+    str += t.month()+"/";
 
-    str += ((String)t.year());
+    str += t.year();
 
     return str;
 }
 
 bool setTimeAutomatically()
 {
-    if(WiFi.status() != WL_CONNECTED) return false;
+    if(!isConnectedToWifi()) return false;
 
     WiFiUDP ntpUDP;
     NTPClient timeClient(ntpUDP);
     timeClient.begin();
     timeClient.setTimeOffset(-10800);
 
-        if(!timeClient.forceUpdate())
+    if(!timeClient.forceUpdate())
     {
         RPprintln("Could not set time automatically.");
         return false;
     }
-        
-    // RPprint("tempo definido para ");
-    // RPprintln(timeClient.getFormattedTime());
-
-    // DateTime nowDT = getDateTime();
-    // setTime(
-    //     (byte)timeClient.getSeconds(),
-    //     (byte)timeClient.getMinutes(),
-    //     (byte)timeClient.getHours(),
-    //     (byte)nowDT.day(),
-    //     (byte)nowDT.month(),
-    //     (int)nowDT.year()
-    // );
-
-    // return true;
 
     DateTime newDT = timeClient.getEpochTime();
-
+        
     RPprint("Time set to ");
     // RPprintln(getStrDateTime(newDT.unixtime()));
-    RPprintln(getStrDateTime(1705802400));
 
-        setTime(
+    setTime(
         (byte) newDT.second(),
         (byte) newDT.minute(),
         (byte) newDT.hour(),
@@ -124,4 +108,23 @@ bool setTimeAutomatically()
     );
 
     return true;
+}
+
+unsigned long lastSucessfulTimeAjust = -timeBetweenSucessfulTimeAjust;
+unsigned long lastTimeAjustAttempt = -timeBetweenTimeAjustAttemps;
+void handlePeriodicTimeAjust()
+{
+    if(!(millis() - lastSucessfulTimeAjust > timeBetweenSucessfulTimeAjust))
+        return;
+
+    lastTimeAjustAttempt = millis();
+
+    if(!(millis() - lastTimeAjustAttempt > timeBetweenTimeAjustAttemps))
+        return;
+
+    LOGprint(getStrDateTime());
+    LOGprintln(" Set time attempt");
+    
+    if(setTimeAutomatically())
+        lastSucessfulTimeAjust = lastTimeAjustAttempt;
 }
