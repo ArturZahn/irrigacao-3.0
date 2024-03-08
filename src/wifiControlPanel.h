@@ -9,8 +9,7 @@
 #include "ota.h"
 #include "remoteSerial.h"
 
-// #define serverBaseUrl "http://192.168.1.5:5500"
-#define serverBaseUrl "http://192.168.1.83:5500"
+#define serverBaseUrl "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/loader.js"
 
 void initWebServer();
 void restartServer();
