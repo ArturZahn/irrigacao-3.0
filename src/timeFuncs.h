@@ -26,8 +26,7 @@ bool setTimeAutomatically();
 
 #define timeBetweenSucessfulTimeAjust 86400000
 #define timeBetweenTimeAjustAttemps    3600000
-// #define timeBetweenSucessfulTimeAjust 10000
-// #define timeBetweenTimeAjustAttemps    1000
+#define delayFromInitToSetTime           30000
 void handlePeriodicTimeAjust();
 
 #endif

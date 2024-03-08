@@ -8,7 +8,7 @@ void cliRunCommand(String cmd)
     if(cmd == F("mostrarProgramacoes")) { showProgramations(); setCmdState(true); }
     else if(cmd == F("alterarProgramacao")) handleAlterProgramation(args);
 
-    else if(cmd == F("mostrarHora")) CMDprintln(getDayTime());
+    else if(cmd == F("mostrarHora")) CMDprintln(getStrDateTime());
     else if(cmd == F("ajustarHora")) {
         if(args == "" || args == "automatico") {
             CMDprintln("defindo hora automaticamente...");

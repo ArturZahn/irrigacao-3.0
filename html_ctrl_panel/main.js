@@ -1140,7 +1140,7 @@ function insertMessageIntoCli(who, text)
 var remoteSerialTimer;
 function startRemoteSerial()
 {
-    remoteSerialTimer = setInterval(loadRemoteSerialData, 2000);//@#@
+    remoteSerialTimer = setInterval(loadRemoteSerialData, 1000);//@#@
     setRefreshMainPage(false);
 }
 function stopRemoteSerial()

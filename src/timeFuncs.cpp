@@ -78,10 +78,15 @@ String getStrDateTime(unsigned long unixTime)
     return str;
 }
 
+// I would prefer to include "wifiHandler.h" in the header file,
+// but that makes an weird error in another file.
+// Aparently defining the function as external works without making weird errors.
+extern bool isConnectedToWifi();
+
 bool setTimeAutomatically()
 {
-    if(WiFi.status() != WL_CONNECTED) return false;
-    // if(!isConnectedToWifi()) return false;
+    // if(WiFi.status() != WL_CONNECTED) return false;
+    if(!isConnectedToWifi()) return false;
 
     WiFiUDP ntpUDP;
     NTPClient timeClient(ntpUDP);
@@ -112,7 +117,7 @@ bool setTimeAutomatically()
 }
 
 unsigned long lastSucessfulTimeAjust = -timeBetweenSucessfulTimeAjust;
-unsigned long lastTimeAjustAttempt = -timeBetweenTimeAjustAttemps;
+unsigned long lastTimeAjustAttempt = delayFromInitToSetTime-timeBetweenTimeAjustAttemps;
 void handlePeriodicTimeAjust()
 {
     unsigned long temp = millis() - lastSucessfulTimeAjust;
@@ -123,10 +128,12 @@ void handlePeriodicTimeAjust()
     if(!(temp > timeBetweenTimeAjustAttemps))
         return;
 
-    lastTimeAjustAttempt = millis();    
+    lastTimeAjustAttempt = millis();
     
     if(setTimeAutomatically())
     {
         lastSucessfulTimeAjust = lastTimeAjustAttempt;
+        LOGprintln("Time set successfully");
     }
+    else LOGprintln("Time set failed");
 }

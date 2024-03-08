@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define logBufferSize 512
+#define logBufferSize 1024
 #define logBufferTruncationIndecitionCharacter '\a'
 void clearLogBuffer();
 void printLogBuffer();
