@@ -1,7 +1,5 @@
 #include "programations.h"
 
-// Programation::Programation(){}
-
 void Programation::setProgramationRawDataPointer(programationRawData *_rd)
 {
     Programation::rawData = _rd;

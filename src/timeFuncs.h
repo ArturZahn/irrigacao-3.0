@@ -19,6 +19,14 @@
 void initTime();
 unsigned long getTime();
 unsigned int getDayTime();
+String getStrDateTime();
+String getStrDateTime(unsigned long);
 bool setTimeAutomatically();
+
+
+#define timeBetweenSucessfulTimeAjust 86400000
+#define timeBetweenTimeAjustAttemps    3600000
+#define delayFromInitToSetTime           30000
+void handlePeriodicTimeAjust();
 
 #endif

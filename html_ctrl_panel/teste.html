@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Chat Page</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .content {
+            overflow-y: auto;
+            flex-grow: 1;
+            border: 1px solid #F00;
+        }
+
+        .bottom {
+            border: 1px solid #0F0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <p>asdasd 0</p>
+            <!-- ... (your other content) ... -->
+            <p>asdasd 10</p>
+        </div>
+        <div class="bottom">
+            <input type="text" onfocus="handleFocus()" onblur="handleBlur()">
+        </div>
+    </div>
+
+    <script>
+        function handleFocus() {
+            document.body.style.height = window.innerHeight + "px";
+        }
+
+        function handleBlur() {
+            document.body.style.height = "100vh";
+        }
+    </script>
+</body>
+</html>

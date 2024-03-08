@@ -15,8 +15,8 @@ void handleWatchTime()
             // new minute!
             // if(now%50==0)
             // {
-                NBprint("time: ");
-                NBprintln(now);
+                // LOGprint("time: ");
+                // LOGprintln(now);
             // }
 
             // continue only if programations are not paused

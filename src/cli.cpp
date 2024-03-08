@@ -8,7 +8,7 @@ void cliRunCommand(String cmd)
     if(cmd == F("mostrarProgramacoes")) { showProgramations(); setCmdState(true); }
     else if(cmd == F("alterarProgramacao")) handleAlterProgramation(args);
 
-    else if(cmd == F("mostrarHora")) CMDprintln(getDayTime());
+    else if(cmd == F("mostrarHora")) CMDprintln(getStrDateTime());
     else if(cmd == F("ajustarHora")) {
         if(args == "" || args == "automatico") {
             CMDprintln("defindo hora automaticamente...");
@@ -86,29 +86,35 @@ void cliRunCommand(String cmd)
 
     else if(cmd == F("mostrarInformacoes")) handleShowInformation();
 
-    else if(cmd == F("mostrarLeiturasDeSolo")) {
-        showSoilMeasurings();
-        setCmdState(true);
-    }
-    else if(cmd == F("mostrarEApagarLeiturasDeSolo")) {
-        showAndClearSoilMeasurings();
-        setCmdState(true);
-    }
-    else if(cmd == F("apagarLeiturasDeSolo")) {
-        clearSoilMeasurings();
-        setCmdState(true);
-    }
-    else if(cmd == F("iniciarDebugSensor")) {
-        setDebugSensor(true);
-        setCmdState(true);
-    }
-    else if(cmd == F("pararDebugSensor")) {
-        setDebugSensor(false);
-        setCmdState(true);
-    }
+    else if(cmd == F("oi")) CMDprintln("Eae chefe, blz?");
+
+    // else if(cmd == F("mostrarLeiturasDeSolo")) {
+    //     showSoilMeasurings();
+    //     setCmdState(true);
+    // }
+    // else if(cmd == F("mostrarEApagarLeiturasDeSolo")) {
+    //     showAndClearSoilMeasurings();
+    //     setCmdState(true);
+    // }
+    // else if(cmd == F("apagarLeiturasDeSolo")) {
+    //     clearSoilMeasurings();
+    //     setCmdState(true);
+    // }
+    // else if(cmd == F("iniciarDebugSensor")) {
+    //     setDebugSensor(true);
+    //     setCmdState(true);
+    // }
+    // else if(cmd == F("pararDebugSensor")) {
+    //     setDebugSensor(false);
+    //     setCmdState(true);
+    // }
 
     // else if(cmd == F("mostrarErros")) CMDprintln("showErrors();"); //showErrors();
     // else if(cmd == F("limparErros")) CMDprintln("clearErrors();"); //clearErrors();
+    
+    // else if(cmd == F("mostrarChuva")) printRainData1234567890();
+    else if(cmd == F("mostrarChuva")) printRainData();
+    else if(cmd == F("limparDadosChuva")) clearRainData();
     
     else
     {

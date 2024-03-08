@@ -1,3 +1,8 @@
+// console.log("teste");
+
+// baseServerUrl = "http://192.168.211.60:5500"
+baseServerUrl = "http://192.168.1.83:5500"
+
 var LOADER_API_tagsToLoad = 
 [
     {
@@ -53,8 +58,8 @@ var LOADER_API_tagsToLoad =
             {
                 tagType: "script",
                 props: {
-                    // src: "http://192.168.0.101:5500/html_ctrl_panel/main.js",
-                    src: "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/main.js",
+                    src: `${baseServerUrl}/html_ctrl_panel/main.js`,
+                    // src: "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/main.js",
                 },
             }
         ],
@@ -65,6 +70,14 @@ var LOADER_API_tagsToLoad =
     {
         whereToAppend: document.head,
         tags: [
+            // {
+            //     tagType: "link",
+            //     props: {
+            //         href: `${baseServerUrl}/html_ctrl_panel/logo.ico`,
+            //         rel: "icon",
+            //         type: "image/x-icon"
+            //     },
+            // },
             {
                 tagType: "link",
                 props: {
@@ -77,8 +90,8 @@ var LOADER_API_tagsToLoad =
             {
                 tagType: "link",
                 props: {
-                    // href: "http://192.168.0.101:5500/html_ctrl_panel/main.css",
-                    href: "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/main.css",
+                    href: `${baseServerUrl}/html_ctrl_panel/main.css`,
+                    // href: "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/main.css",
                     rel: "stylesheet",
                 },
             },
@@ -95,6 +108,6 @@ var LOADER_API_contentLoaded = ()=>{
 }
 
 var loadApiScript = document.createElement("script");
-// loadApiScript.setAttribute("src", "http://192.168.0.101:5500/html_ctrl_panel/loader.api.js");
-loadApiScript.setAttribute("src", "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/loader.api.js");
+loadApiScript.setAttribute("src", `${baseServerUrl}/html_ctrl_panel/loader.api.js`);
+// loadApiScript.setAttribute("src", "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/loader.api.js");
 document.head.appendChild(loadApiScript);

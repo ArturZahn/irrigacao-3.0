@@ -5,12 +5,6 @@
 #include "programations.h"
 #include "automaticMode.h"
 
-void checkEvents(int *now);
-byte findProgramationToStartNow(int *now);
-
-#define stageDurationMultiplier 60000 //in minutes
-// #define stageDurationMultiplier 1000 //in seconds
-
 class eventClass
 {
     private:
@@ -41,6 +35,12 @@ class eventClass
     byte getActiveProgramation();
 
 };
+
+void checkEvents(int *now);
+byte findProgramationToStartNow(int *now);
+
+#define stageDurationMultiplier 60000 //in minutes
+// #define stageDurationMultiplier 1000 //in seconds
 
 void handleActiveEvent();
 bool startEvent(byte programationToStart);

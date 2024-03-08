@@ -1,5 +1,3 @@
-// console.log("oi")
-
 var espURL;
 
 function startApp(espIp)
@@ -10,6 +8,10 @@ function startApp(espIp)
         `<div class="pageContainer">
             <div class="page pageMain" style="display: none;">
                 <div class="container-fluid header">
+                    
+                    <label for="menuInput">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Hamburger_icon.svg">
+                    </label>
                     <h1>Painel de controle</h1>
                 </div>
                 <div class="px-2 pb-1">
@@ -77,7 +79,60 @@ function startApp(espIp)
                     </div>
                 </div>
             </div>
-        </div>`
+        </div>
+        
+
+        <div class="pages">
+            <div id="cliPage" class="hidden">
+                <div class="pageTitle">
+                    <label class="closePage">
+                        <img src="https://www.svgrepo.com/download/533620/arrow-sm-left.svg">
+                    </label>
+                    <h1>Cli</h1>
+                    <div class="grow1">
+                    </div>
+                    <label class="titleIcon" id="clearCli">
+                        <img src="https://www.svgrepo.com/download/390653/bin-cancel-delete-remove-trash-garbage.svg">
+                    </label>
+                </div>
+                <div class="pageContent cliPage">
+                    <div class="cliOutput">
+                        
+                    </div>
+                    <div class="textInput">
+                        <input type="text" id="cliInput">
+                        <div id="sendBtn">
+                            <img src="https://www.svgrepo.com/download/510186/send-message.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="checkbox" id="menuInput">
+        <div class="sideMenu">
+            <div class="sideMenuTitle">
+                <label for="menuInput" class="sideMenuReturn">
+                    <img src="https://www.svgrepo.com/download/533620/arrow-sm-left.svg">
+                </label>
+                <h1>Opções</h1>
+            </div>
+            <div class="sideMenuContent">
+                <div class="sideMenuCard menor" for="cliPage">
+                    <img src="https://www.svgrepo.com/download/511163/terminal.svg">
+                    <div class="sideMenuCardContent">
+                        CLI
+                    </div>
+                </div>
+                <!--<div class="sideMenuCard" for="serialPage">
+                    <img src="https://www.svgrepo.com/download/309949/serial-port.svg">
+                    <div class="sideMenuCardContent">
+                        Serial remoto
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        `
     );
     
     content.ready(contentReady);
@@ -89,8 +144,16 @@ function contentReady()
 {
     $("#pg_main").change(handle_pg_main_change);
     $(".returnToMain").click(loadMainPage);
+    $("#menuInput").change(sideMenuChange);
+    $(".sideMenuContent > *").click(openPage);
+    $(".closePage").click(closePage);
+    $("#sendBtn").click(handleSendCliCmdBtn);
+    $("#cliInput").keydown(cliKeyDown);
+    $("#clearCli").click(clearCli);
 
     loadMainPage();
+
+    // openPage("cliPage")
 }
 
 function getData(functionToRunAfterFinishing)
@@ -441,7 +504,7 @@ function setRefreshMainPage(stt)
                 return;
             }
             checkIfNeedToUpdate();
-        }, 500);
+        }, 2000); //@#@
     }
     else clearInterval(refreshMainPageTimer);
 }
@@ -457,7 +520,6 @@ function checkIfNeedToUpdate()
     $.ajax({
         url: `${espURL}/needToUpdate`,
         success: (data)=>{
-            console.log(data);
             if(data != updateNumber)
             {
                 loadMainPage();
@@ -977,4 +1039,152 @@ function updateManualDefaultInUI(sectionNum, temporary)
     {   
         $(`#manualSection > * #sma${sectionNum}_main_default`).text("Padrão").css("opacity", temporary?"0.5":"1");
     }
+}
+
+function sideMenuChange()
+{
+    var checked = $("#menuInput").is(":checked");
+    if(checked) $("body").addClass("noscroll")
+    else $("body").removeClass("noscroll")
+}
+
+function openPage(e)
+{
+    var page;
+    if(typeof e == "object")
+    {
+        el = $(e.target);
+        while(!el.is(".sideMenuCard") && el.length >= 1)
+            el = el.parent();
+
+        page = el.attr("for");
+    }
+    else page = e;
+    
+    $("#menuInput:checked").click();
+    $(`#${page}`).removeClass("hidden");
+    
+    $("body").addClass("noscroll")
+
+    if(page == "cliPage")
+    {
+        startRemoteSerial();
+    }
+}
+
+function closePage(e)
+{
+    $(e.target).parent().parent().parent().addClass("hidden");
+    
+    $("body").removeClass("noscroll");
+
+    stopRemoteSerial();
+}
+
+function handleSendCliCmdBtn()
+{
+    cliOut = $(".cliOutput");
+
+    var input = $("#cliInput");
+    var text = input.val();
+
+    if(text == "") return;
+
+    cliRunSendCmd(text);
+    
+    text += "\n";
+    input.val("");
+    input.focus();
+
+
+    insertMessageIntoCli("me", text);
+    cliOut[0].scrollTop = cliOut[0].scrollHeight;
+}
+
+function cliKeyDown(e)
+{
+    if(e.originalEvent.key == "Enter" && !e.originalEvent.ctrlKey)
+        handleSendCliCmdBtn();
+}
+
+// function addReceivedText(text)
+// {
+//     cliOut = $(".cliOutput");
+//     var isScrolledDown = cliOut[0].scrollTop+cliOut[0].offsetHeight == cliOut[0].scrollHeight;
+    
+//     var el = insertMessageIntoCli("esp32", text);
+    
+//     if(isScrolledDown)
+//         cliOut[0].scrollTop = cliOut[0].scrollHeight;
+// }
+
+function insertMessageIntoCli(who, text)
+{
+    text = text.replaceAll("\n", "<br>")
+
+    var last = $(".cliOutput > :last-child");
+    var el;
+    if(last.length == 0 || !last.is(`.${who}`))
+    {
+        el = $(`<div class="${who}"></div>`);
+        $(".cliOutput").append(el);
+    }
+    else
+    {
+        el = last;
+    }
+
+    el.html(el.html() + text);
+}
+
+var remoteSerialTimer;
+function startRemoteSerial()
+{
+    remoteSerialTimer = setInterval(loadRemoteSerialData, 1000);//@#@
+    setRefreshMainPage(false);
+}
+function stopRemoteSerial()
+{
+    clearInterval(remoteSerialTimer);
+    setRefreshMainPage(true);
+}
+function loadRemoteSerialData()
+{
+    $.ajax({
+        url: `${espURL}/remoteSerial`, // Sample API endpoint
+        method: 'GET',
+        success: function(data) {
+            if(data != "")
+            {
+                cliOut = $(".cliOutput");
+                var isScrolledDown = cliOut[0].scrollTop+cliOut[0].offsetHeight == cliOut[0].scrollHeight;
+                
+                if(data[0].charCodeAt(0) == 7)
+                {
+                    console.log("division");
+                    insertMessageIntoCli("division", "");
+                    data = data.substr(1);
+                }
+                
+                insertMessageIntoCli("esp32", data);
+
+                if(isScrolledDown)
+                    cliOut[0].scrollTop = cliOut[0].scrollHeight;
+            }
+        }
+    });
+}
+
+
+function clearCli()
+{
+    $(".cliOutput").html("");
+}
+
+function cliRunSendCmd(text)
+{
+    $.ajax({
+        url: `${espURL}/cli/${text}`, // Sample API endpoint
+        method: 'GET'
+    });
 }

@@ -1,17 +1,20 @@
 #ifndef WIFICONTROL_H
 #define WIFICONTROL_H
 
-#include <WiFiClient.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
 #include "handlePrint.h"
 #include "aditionalFunctions.h"
 #include "cli.h"
 #include "ota.h"
+#include "remoteSerial.h"
+
+#define serverBaseUrl "https://arturzahn.github.io/irrigacao-3.0/html_ctrl_panel/loader.js"
 
 void initWebServer();
-
 void restartServer();
+
+WebServer* getWebServerInstance();
 
 void handleWebServer();
 void handleNotFound();
@@ -19,5 +22,6 @@ void handleRoot();
 void handleCli(String fullCmd);
 void setNeedToUpdate();
 void handleNeedToUpdate();
+void handleRemoteSerial();
 
 #endif

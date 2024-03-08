@@ -3,7 +3,7 @@
 void initTime()
 {
     #ifdef disableRTC
-    NBprintln("RTC está desabilitado!!");
+    LOGprintln("RTC está desabilitado!!");
     #else
     initRTC();
     #endif
@@ -34,7 +34,7 @@ unsigned long getTime()
 
         if(i >= numbOfRetriesConnecRTC) 
         {
-            NBprintln("failed reading RTC time");
+            LOGprintln("failed reading RTC time");
             restartSystem();
         }
     }
@@ -49,52 +49,91 @@ unsigned int getDayTime()
     return (getTime()%86400)/60;
 }
 
-// RTClib myRTC_2;
+String getStrDateTime()
+{
+    return getStrDateTime(getTime());
+}
+
+String getStrDateTime(unsigned long unixTime)
+{
+    DateTime t(unixTime);
+    String str = "";
+    if(t.hour() < 10) str += "0";
+    str += ((String)t.hour())+":";
+
+    if(t.minute() < 10) str += "0";
+    str += ((String)t.minute())+":";
+
+    if(t.second() < 10) str += "0";
+    str += ((String)t.second())+" ";
+
+    if(t.day() < 10) str += "0";
+    str += ((String)t.day())+"/";
+
+    if(t.month() < 10) str += "0";
+    str += ((String)t.month())+"/";
+
+    str += ((String)t.year());
+
+    return str;
+}
+
+// I would prefer to include "wifiHandler.h" in the header file,
+// but that makes an weird error in another file.
+// Aparently defining the function as external works without making weird errors.
+extern bool isConnectedToWifi();
+
 bool setTimeAutomatically()
 {
-    
-    if(WiFi.status() != WL_CONNECTED) return false;
+    // if(WiFi.status() != WL_CONNECTED) return false;
+    if(!isConnectedToWifi()) return false;
 
     WiFiUDP ntpUDP;
     NTPClient timeClient(ntpUDP);
     timeClient.begin();
     timeClient.setTimeOffset(-10800);
 
-    NBprint("Getting time");
-    // byte i;
-    // for(i = 0; i < numberOfTriesToGetTimeFromInternet; i++) {
-    //     if(timeClient.update())
-    //     {
-    //         break;
-    //     }
-    //     timeClient.forceUpdate();
-    //     NBprint(".");
-    // }
-
-    // if(i >= numberOfTriesToGetTimeFromInternet)
-    // {
-    //     NBprint("cant get time");
-    //     return false;
-    // }
-    // NBprintln();
     if(!timeClient.forceUpdate())
     {
-        RPprintln("Não foi possível definir hora automaticamente.");
+        RPprintln("Could not set time automatically.");
         return false;
     }
-        
-    RPprint("tempo definido para ");
-    RPprintln(timeClient.getFormattedTime());
 
-    DateTime nowDT = getDateTime();
+    DateTime newDT = timeClient.getEpochTime();
+    
+    RPprint("Time set to ");
+    RPprintln(getStrDateTime(newDT.unixtime()));
+
     setTime(
-        (byte)timeClient.getSeconds(),
-        (byte)timeClient.getMinutes(),
-        (byte)timeClient.getHours(),
-        (byte)nowDT.day(),
-        (byte)nowDT.month(),
-        (int)nowDT.year()
+        (byte) newDT.second(),
+        (byte) newDT.minute(),
+        (byte) newDT.hour(),
+        (byte) newDT.day(),
+        (byte) newDT.month(),
+        (int)  newDT.year()
     );
 
     return true;
+}
+
+unsigned long lastSucessfulTimeAjust = -timeBetweenSucessfulTimeAjust;
+unsigned long lastTimeAjustAttempt = delayFromInitToSetTime-timeBetweenTimeAjustAttemps;
+void handlePeriodicTimeAjust()
+{
+    unsigned long temp = millis() - lastSucessfulTimeAjust;
+    if(!(temp > timeBetweenSucessfulTimeAjust))
+        return;
+
+    temp = millis() - lastTimeAjustAttempt;
+    if(!(temp > timeBetweenTimeAjustAttemps))
+        return;
+
+    lastTimeAjustAttempt = millis();
+    
+    if(setTimeAutomatically())
+    {
+        lastSucessfulTimeAjust = lastTimeAjustAttempt;
+        LOGprintln("Time set successfully");
+    }
+    else LOGprintln("Time set failed");
 }

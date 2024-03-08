@@ -11,11 +11,11 @@ void initRTC()
 
     if(checkIfRTCIsWorking())
     {
-        NBprintln("RTC is working!");
+        LOGprintln("RTC is working!");
     }
     else
     {
-        NBprintln("RTC isnt working");
+        LOGprintln("RTC isnt working");
     }
 }
 
@@ -51,12 +51,11 @@ void setTime(byte second, byte minute, byte hour, byte date, byte month, int yea
     myRTC_DS_tmp.setYear(year - 2000);
 }
 
-// hh:mm:ss dd/mm/yyyy 
-// hh:mm:ss yyyy-mm-dd
-bool setTime(String datetime)
+bool parseTime(String datetime, byte& second, byte& minute, byte& hour, byte& day, byte& month, int& year)
 {
-    byte second, minute, hour, day, month;
-    int year;
+    // datetime formats:
+    // hh:mm:ss dd/mm/yyyy 
+    // hh:mm:ss yyyy-mm-dd
     char carac = ':';
 
     byte tp = datetime.indexOf(carac);
@@ -95,6 +94,15 @@ bool setTime(String datetime)
 
     if(portugueseFormat) year = datetime.toInt();
     else day = datetime.toInt();
+
+    return true;
+}
+
+bool setTime(String dateTimeStr)
+{
+    byte second, minute, hour, day, month; int year;
+    if(!parseTime(dateTimeStr, second, minute, hour, day, month, year))
+        return false;
 
     setTime(second, minute, hour, day, month, year);
 
