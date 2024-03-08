@@ -6,4 +6,5 @@
 .vscode/
 .vscode/*
 .vscode/**/*
+.vscode/extensions.json
 defaultCredentials.h
